@@ -74,43 +74,42 @@
         Toast('Sesión cerrada.');
     }
 
+    const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+    /* La barra superior solo esconde "Entrar" y "Registrarse" cuando hay sesión.
+       El perfil y el botón del centro de mando aparecen en la pantalla de inicio. */
     function pintarSesion(user) {
         if ($('adminForm')) return;   // el centro de mando maneja su propia barra
         const bar = document.querySelector('.nav-actions');
-        if (!bar) return;
-        bar.querySelectorAll('#btnEntrar, .btn-login, .btn-register, a[href="login.html"], a[href="registro.html"]')
-            .forEach(el => { el.style.display = user ? 'none' : ''; });
-
-        let info = $('navUser');
-        if (user) {
-            if (!info) {
-                info = document.createElement('span');
-                info.id = 'navUser'; info.className = 'nav-user';
-                const out = document.createElement('button');
-                out.id = 'btnSalir'; out.className = 'btn-gamer'; out.textContent = 'Salir';
-                out.addEventListener('click', salir);
-                bar.appendChild(info); bar.appendChild(out);
-            }
-            info.textContent = 'Hola, ' + nombreDe(user);
-        } else if (info) {
-            info.remove(); $('btnSalir').remove();
+        if (bar) {
+            bar.querySelectorAll('#btnEntrar, .btn-login, .btn-register, a[href="login.html"], a[href="registro.html"]')
+                .forEach(el => { el.style.display = user ? 'none' : ''; });
         }
-        setTimeout(() => revisarAdmin(user), 0);
+        setTimeout(() => pintarPerfil(user), 0);
     }
 
-    /* Si la cuenta es de administrador, aparece el botón "Centro de mando" en la barra */
     let revision = 0;   // solo cuenta la última comprobación (se llama varias veces al cargar)
-    async function revisarAdmin(user) {
+    async function pintarPerfil(user) {
+        const caja = $('perfil');
+        if (!caja) return;                                   // solo existe en la pantalla de inicio
         const turno = ++revision;
-        if (!user || !sb) { document.querySelectorAll('#btnCentro').forEach(el => el.remove()); return; }
+        if (!user || !sb) { caja.hidden = true; caja.innerHTML = ''; return; }
         const { data } = await sb.from('admins').select('rol').eq('user_id', user.id).maybeSingle();
-        if (turno !== revision) return;   // llegó una comprobación más nueva: esta se descarta
-        const bar = document.querySelector('.nav-actions');
-        document.querySelectorAll('#btnCentro').forEach(el => el.remove());
-        if (!data || !bar) return;
-        const a = document.createElement('a');
-        a.id = 'btnCentro'; a.className = 'btn-gamer'; a.href = 'admin.html'; a.textContent = 'Centro de mando';
-        bar.insertBefore(a, $('navUser') || bar.firstChild);
+        if (turno !== revision) return;                      // llegó una comprobación más nueva
+        const rol = data ? data.rol : null, nombre = nombreDe(user);
+        const desde = user.created_at ? new Date(user.created_at).toLocaleDateString('es', { dateStyle: 'long' }) : '';
+        caja.innerHTML = `<div class="perfil-card">
+            <div class="perfil-avatar" aria-hidden="true">${esc(nombre.charAt(0).toUpperCase())}</div>
+            <div class="perfil-datos"><span class="perfil-eyebrow">MI PERFIL</span>
+                <h3 class="perfil-nombre">${esc(nombre)}</h3>
+                <span class="perfil-rol${rol ? ' admin' : ''}">${rol === 'dueno' ? 'Dueño' : rol === 'admin' ? 'Administrador' : 'Miembro'}</span>
+                ${desde ? `<small class="perfil-desde">En la Guarida desde el ${esc(desde)}</small>` : ''}</div>
+            <div class="perfil-acciones">
+                ${rol ? '<a class="btn-gamer" href="admin.html"><i class="fa-solid fa-gauge-high"></i> Centro de mando</a>' : ''}
+                <button class="btn-gamer btn-outline" id="perfilSalir" type="button"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</button>
+            </div></div>`;
+        caja.hidden = false;
+        $('perfilSalir').addEventListener('click', salir);
     }
 
     /* ---------- Login (ventana "Entrar" y página login.html) ---------- */
