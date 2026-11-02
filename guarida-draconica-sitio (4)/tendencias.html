@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GUARIDA DRACONICA | Tendencias</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/56663d21c5.js" crossorigin="anonymous"></script>
+    <link rel="shortcut icon" href="imagenes/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+ 
+<!-- ══ MODAL LOGIN ════════════════════════════════════════ -->
+<div class="modal-overlay" id="modalOverlay">
+    <form class="modal-caja" id="modalForm" novalidate>
+        <button type="button" class="modal-cerrar" id="modalCerrar">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <h3 class="modal-titulo">Iniciar <span>Sesión</span></h3>
+        <div class="modal-campo">
+            <label for="loginUsuario">Usuario</label>
+            <input type="text" id="loginUsuario" placeholder="Pepito_Perez23" autocomplete="username">
+            <span class="modal-error" id="errorUsuario"></span>
+        </div>
+        <div class="modal-campo">
+            <label for="loginPassword">Contraseña</label>
+            <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password">
+            <span class="modal-error" id="errorPassword"></span>
+        </div>
+        <button type="submit" class="modal-submit">Entrar</button>
+        <p class="modal-pie">¿No tienes cuenta? <a href="registro.html">Regístrate aquí</a></p>
+    </form>
+</div>
+ 
+<!-- ══ NAVBAR ═════════════════════════════════════════════ -->
+<header class="navbar-gamer">
+    <a href="index.html" class="logo">GUARIDA  <span>DRACONICA</span></a>
+    <button class="hamburger" id="hamburger"><i class="fa-solid fa-bars"></i></button>
+    <nav>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="noticias.html">Draconica Clan</a></li>
+            <li><a href="eventos.html">Eventos</a></li>
+            <li><a href="torneos.html">Torneos</a></li>
+            <li><a href="tendencias.html" class="active">Ranking de duelos</a></li>
+            <li><a href="tierlist.html">Tier list</a></li>
+        </ul>
+    </nav>
+    <div class="nav-actions">
+        <button class="btn-gamer btn-login" id="btnEntrar">Entrar</button>
+        <a href="registro.html" class="btn-gamer btn-register">Registrarse</a>
+    </div>
+</header>
+ 
+<!-- ══ PAGE HERO ══════════════════════════════════════════ -->
+<div class="page-hero">
+    <span class="seccion-eyebrow"><i class="fa-solid fa-fire"></i> EN TIEMPO REAL</span>
+    <h2>Tendencias <span>del momento</span></h2>
+    <p>Los juegos más jugados y en crecimiento dentro de la comunidad gamer global.</p>
+</div>
+ 
+<!-- ══ TENDENCIAS + LANZAMIENTOS ═════════════════════════ -->
+<div class="tendencias-layout">
+ 
+    <!-- Panel izquierdo: barras -->
+    <div class="panel-gamer">
+        <span class="seccion-eyebrow">POPULARIDAD</span>
+        <h2 class="seccion-titulo" style="margin-bottom:28px;">Juegos más jugados</h2>
+ 
+        <div class="tend-item">
+            <div class="tend-info">
+                <span class="tend-rank">#1</span>
+                <span class="tend-nombre">GTA VI</span>
+                <span class="tend-pct">98%</span>
+            </div>
+            <div class="tend-barra-fondo">
+                <div class="tend-barra" data-w="98"></div>
+            </div>
+        </div>
+ 
+        <div class="tend-item">
+            <div class="tend-info">
+                <span class="tend-rank">#2</span>
+                <span class="tend-nombre">Minecraft</span>
+                <span class="tend-pct">85%</span>
+            </div>
+            <div class="tend-barra-fondo">
+                <div class="tend-barra" data-w="85"></div>
+            </div>
+        </div>
+ 
+        <div class="tend-item">
+            <div class="tend-info">
+                <span class="tend-rank">#3</span>
+                <span class="tend-nombre">Fortnite</span>
+                <span class="tend-pct">78%</span>
+            </div>
+            <div class="tend-barra-fondo">
+                <div class="tend-barra" data-w="78"></div>
+            </div>
+        </div>
+ 
+        <div class="tend-item">
+            <div class="tend-info">
+                <span class="tend-rank">#4</span>
+                <span class="tend-nombre">Counter Strike 2</span>
+                <span class="tend-pct">70%</span>
+            </div>
+            <div class="tend-barra-fondo">
+                <div class="tend-barra" data-w="70"></div>
+            </div>
+        </div>
+ 
+        <div class="tend-item">
+            <div class="tend-info">
+                <span class="tend-rank">#5</span>
+                <span class="tend-nombre">Dota 2</span>
+                <span class="tend-pct">65%</span>
+            </div>
+            <div class="tend-barra-fondo">
+                <div class="tend-barra" data-w="65"></div>
+            </div>
+        </div>
+ 
+        <div class="tend-item">
+            <div class="tend-info">
+                <span class="tend-rank">#6</span>
+                <span class="tend-nombre">Valorant</span>
+                <span class="tend-pct">60%</span>
+            </div>
+            <div class="tend-barra-fondo">
+                <div class="tend-barra" data-w="60"></div>
+            </div>
+        </div>
+ 
+        <div class="tend-item">
+            <div class="tend-info">
+                <span class="tend-rank">#7</span>
+                <span class="tend-nombre">PUBG</span>
+                <span class="tend-pct">50%</span>
+            </div>
+            <div class="tend-barra-fondo">
+                <div class="tend-barra" data-w="50"></div>
+            </div>
+        </div>
+ 
+    </div>
+ 
+    <!-- Panel derecho: próximos lanzamientos -->
+    <div class="panel-gamer">
+        <span class="seccion-eyebrow">PRÓXIMAMENTE</span>
+        <h2 class="seccion-titulo" style="margin-bottom:28px;">Próximos lanzamientos</h2>
+ 
+        <div class="lanza-item">
+            <div class="lanza-icono"><i class="fa-solid fa-gamepad"></i></div>
+            <div>
+                <p class="lanza-nombre">SolarPunk</p>
+                <span class="lanza-plataforma">PC / PS5</span>
+            </div>
+            <span class="lanza-fecha">JUN 2026</span>
+        </div>
+ 
+        <div class="lanza-item">
+            <div class="lanza-icono"><i class="fa-solid fa-dragon"></i></div>
+            <div>
+                <p class="lanza-nombre">Assassin's Creed</p>
+                <span class="lanza-plataforma">PC / PS5 / Xbox</span>
+            </div>
+            <span class="lanza-fecha">JUL 2026</span>
+        </div>
+ 
+        <div class="lanza-item">
+            <div class="lanza-icono"><i class="fa-solid fa-ghost"></i></div>
+            <div>
+                <p class="lanza-nombre">Silent Hill: Townfall</p>
+                <span class="lanza-plataforma">PS5 / PC</span>
+            </div>
+            <span class="lanza-fecha">SEP 2026</span>
+        </div>
+ 
+        <div class="lanza-item">
+            <div class="lanza-icono"><i class="fa-solid fa-fist-raised"></i></div>
+            <div>
+                <p class="lanza-nombre">EA Sports UFC 6</p>
+                <span class="lanza-plataforma">PS5 / Xbox Series X</span>
+            </div>
+            <span class="lanza-fecha">DIC 2026</span>
+        </div>
+ 
+        <div class="lanza-item">
+            <div class="lanza-icono"><i class="fa-solid fa-shield-halved"></i></div>
+            <div>
+                <p class="lanza-nombre">Gothic 1 Remake</p>
+                <span class="lanza-plataforma">PC / PS5 / Xbox</span>
+            </div>
+            <span class="lanza-fecha">MAR 2027</span>
+        </div>
+ 
+        <div class="lanza-item">
+            <div class="lanza-icono"><i class="fa-solid fa-bolt"></i></div>
+            <div>
+                <p class="lanza-nombre">Control 2</p>
+                <span class="lanza-plataforma">PC / PS5 / Xbox</span>
+            </div>
+            <span class="lanza-fecha">ENE 2027</span>
+        </div>
+ 
+        <div class="lanza-item">
+            <div class="lanza-icono"><i class="fa-solid fa-star"></i></div>
+            <div>
+                <p class="lanza-nombre">Final Fantasy VII Rebirth 2</p>
+                <span class="lanza-plataforma">PS5</span>
+            </div>
+            <span class="lanza-fecha">AGO 2027</span>
+        </div>
+ 
+    </div>
+ 
+</div>
+ 
+<!-- ══ FOOTER ════════════════════════════════════════════ -->
+<footer class="footer">
+    <div class="footer-grid">
+        <div>
+            <p class="footer-logo">GUARIDA <span>DRACONICA</span></p>
+            <p class="footer-slogan">Tu portal de noticias, torneos y eventos gamer.</p>
+            <div class="footer-redes">
+                <a href="#" class="footer-red"><i class="fa-brands fa-x-twitter"></i></a>
+                <a href="#" class="footer-red"><i class="fa-brands fa-discord"></i></a>
+                <a href="#" class="footer-red"><i class="fa-brands fa-youtube"></i></a>
+                <a href="#" class="footer-red"><i class="fa-brands fa-twitch"></i></a>
+            </div>
+        </div>
+        <div class="footer-col">
+            <h4>Secciones</h4>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="noticias.html">Draconica Clan</a></li>
+                <li><a href="eventos.html">Eventos</a></li>
+                <li><a href="torneos.html">Torneos</a></li>
+                <li><a href="ranking.html">Ranking de Duelos</a></li>
+            <li><a href="tierlist.html">Tier list</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Cuenta</h4>
+            <ul>
+                <li><a href="registro.html">Registrarse</a></li>
+                <li><a href="login.html">Iniciar Sesión</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>© 2026 GUARIDA DRACONICA — Todos los derechos reservados</p>
+    </div>
+</footer>
+ 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="auth.js"></script>
+<script src="script.js"></script>
+<script>
+// Animar barras al entrar al viewport
+const barras = document.querySelectorAll(".tend-barra");
+const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const barra = entry.target;
+            const w = barra.getAttribute("data-w");
+            barra.style.width = w + "%";
+            observer.unobserve(barra);
+        }
+    });
+}, { threshold: 0.3 });
+ 
+barras.forEach(b => observer.observe(b));
+</script>
+</body>
+</html>
