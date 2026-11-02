@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GUARIDA DRACONICA | Ranking de Duelos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/56663d21c5.js" crossorigin="anonymous"></script>
+    <link rel="shortcut icon" href="imagenes/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Ranking: usa la paleta de style.css (--rojo, --cian, --naranja, --panel, --borde) */
+        .oro { --c: #ffb400; } .plata { --c: #c9d1e0; } .bronce { --c: var(--naranja); }
+        @keyframes subir { from { opacity: 0; transform: translateY(26px); } to { opacity: var(--o, 1); transform: none; } }
+
+        .podio { display: grid; grid-template-columns: 1fr 1.15fr 1fr; gap: 20px; align-items: end; max-width: 900px; margin: 0 auto; }
+        .pod { --d: 0s; background: var(--panel); border: 1px solid var(--borde); border-top: 3px solid var(--c); border-radius: 16px; padding: 26px 16px; text-align: center; min-width: 0; opacity: 0; animation: subir .8s cubic-bezier(.2,.8,.2,1) var(--d) forwards; }
+        .pod.p1 { padding-block: 40px; background: linear-gradient(#1a0030, var(--panel)); box-shadow: 0 0 50px rgba(255,180,0,.15); }
+        .pod.libre { --o: .4; }
+        .pod .pos { font: 900 13px "Orbitron", sans-serif; color: var(--c); letter-spacing: 2px; }
+        .pod .quien { font-weight: 700; margin: 8px 0 2px; overflow-wrap: anywhere; }
+        .pod .num { font: 900 clamp(40px, 7vw, 64px)/1 "Orbitron", sans-serif; color: var(--c); text-shadow: 0 0 22px var(--c); }
+        .pod .sub { color: #999; font-size: 12px; margin-top: 6px; }
+
+        .rk-layout { display: grid; grid-template-columns: 1.4fr 1fr; gap: 32px; max-width: 1280px; margin: 0 auto; padding: 24px 32px 72px; align-items: start; }
+        .rk-tools { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; }
+        .rk-tools input, .rk-tools select { background: #12002a; border: 1.5px solid #330055; border-radius: 8px; padding: 11px 14px; color: #fff; font: 14px "Montserrat", sans-serif; }
+        .rk-tools input { flex: 1 1 180px; }
+        .rk-tools input:focus, .rk-tools select:focus { outline: none; border-color: var(--rojo); box-shadow: 0 0 8px rgba(255,0,51,.2); }
+        .rk-list { list-style: none; }
+        .rk-list .tend-item { opacity: 0; animation: subir .5s ease calc(var(--i, 0) * 70ms) forwards; }
+        .rk-sub { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; font-size: 12px; color: #888; margin-top: 9px; }
+        .rk-sub a { color: var(--cian); text-decoration: none; font-weight: 600; }
+        .rk-sub a:hover { text-decoration: underline; }
+        .rk-rep { margin-left: auto; background: none; border: 0; color: #777; cursor: pointer; font: inherit; text-decoration: underline; }
+        .rk-rep:hover { color: var(--rojo); }
+        .ok { background: rgba(0,204,68,.15); color: #00cc44; border-radius: 12px; padding: 2px 9px; font-size: 10px; font-weight: 700; margin-left: 8px; white-space: nowrap; }
+        .sube { color: #00cc44; font-weight: 700; } .baja { color: var(--rojo); font-weight: 700; }
+        .combo { display: inline-flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+        .combo img { width: 28px; height: 28px; border-radius: 6px; object-fit: cover; border: 1px solid #330055; background: #12002a; }
+        .clase { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--cian); background: rgba(0,229,255,.1); border-radius: 12px; padding: 3px 9px; }
+        .pod .combo { justify-content: center; margin: 8px 0 2px; }
+        .rk-vacio { text-align: center; color: #888; padding: 28px 10px; }
+        .rk-aviso { background: #1a0030; border-left: 3px solid var(--naranja); padding: 10px 14px; border-radius: 6px; margin: 0 auto 24px; max-width: 900px; font-size: 13px; }
+        .rk-mas { display: block; margin: 18px auto 0; }
+        .rk-nota { font-size: 12px; color: #888; margin-top: 14px; line-height: 1.5; }
+        .form-campo input[type=file] { padding: 9px 12px; }
+
+        /* Intro (una vez por sesión, se salta con un clic) */
+        #intro { position: fixed; inset: 0; z-index: 3000; background: var(--fondo); display: grid; place-items: center; cursor: pointer; overflow: hidden; animation: fuera .5s 2s forwards; }
+        #intro b { font: 900 clamp(28px, 8vw, 72px)/1.1 "Orbitron", sans-serif; text-align: center; padding: 0 16px; color: #fff; text-shadow: 0 0 30px var(--rojo); animation: titulo 1.2s cubic-bezier(.2,.8,.2,1) both; }
+        #intro b span { color: var(--rojo); }
+        #intro i { position: absolute; left: -20%; top: 52%; width: 140%; height: 6px; background: linear-gradient(90deg, var(--rojo), var(--cian)); transform: rotate(-8deg) scaleX(0); transform-origin: left; box-shadow: 0 0 30px var(--rojo); animation: tajo .7s .5s cubic-bezier(.7,0,.2,1) forwards; }
+        @keyframes titulo { from { opacity: 0; letter-spacing: .3em; filter: blur(8px); } to { opacity: 1; letter-spacing: .02em; filter: none; } }
+        @keyframes tajo { to { transform: rotate(-8deg) scaleX(1); } }
+        @keyframes fuera { to { opacity: 0; visibility: hidden; } }
+
+        @media (max-width: 1024px) { .rk-layout { grid-template-columns: 1fr; } }
+        @media (max-width: 640px) { .podio { grid-template-columns: 1fr; } .pod.p1 { order: -1; } .rk-layout { padding-inline: 16px; } }
+        @media (prefers-reduced-motion: reduce) {
+            #intro { display: none; }
+            .pod, .rk-list .tend-item { animation: none; opacity: 1; }
+            .pod.libre { opacity: .4; }
+            .tend-barra { transition: none; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="intro" role="presentation"><i></i><b>DUELOS DEL <span>DESTINO</span></b></div>
+
+<!-- ══ MODAL LOGIN ════════════════════════════════════════ -->
+<div class="modal-overlay" id="modalOverlay">
+    <form class="modal-caja" id="modalForm" novalidate>
+        <button type="button" class="modal-cerrar" id="modalCerrar"><i class="fa-solid fa-xmark"></i></button>
+        <h3 class="modal-titulo">Iniciar <span>Sesión</span></h3>
+        <div class="modal-campo">
+            <label for="loginUsuario">Usuario</label>
+            <input type="text" id="loginUsuario" placeholder="Pepito_Perez23" autocomplete="username">
+            <span class="modal-error" id="errorUsuario"></span>
+        </div>
+        <div class="modal-campo">
+            <label for="loginPassword">Contraseña</label>
+            <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password">
+            <span class="modal-error" id="errorPassword"></span>
+        </div>
+        <button type="submit" class="modal-submit">Entrar</button>
+        <p class="modal-pie">¿No tienes cuenta? <a href="registro.html">Regístrate aquí</a></p>
+    </form>
+</div>
+
+<!-- ══ NAVBAR ═════════════════════════════════════════════ -->
+<header class="navbar-gamer">
+    <a href="index.html" class="logo">GUARIDA <span>DRACONICA</span></a>
+    <button class="hamburger" id="hamburger" aria-label="Abrir menú"><i class="fa-solid fa-bars"></i></button>
+    <nav>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="noticias.html">Draconica Clan</a></li>
+            <li><a href="eventos.html">Eventos</a></li>
+            <li><a href="torneos.html">Torneos</a></li>
+            <li><a href="ranking.html" class="active">Ranking de duelos</a></li>
+            <li><a href="tierlist.html">Tier list</a></li>
+        </ul>
+    </nav>
+    <div class="nav-actions">
+        <button class="btn-gamer btn-login" id="btnEntrar">iniciar sesión</button>
+        <a href="registro.html" class="btn-gamer btn-register">Registrarse</a>
+    </div>
+</header>
+
+<!-- ══ PAGE HERO ══════════════════════════════════════════ -->
+<div class="page-hero">
+    <span class="seccion-eyebrow"><i class="fa-solid fa-trophy"></i> DUELOS DEL DESTINO</span>
+    <h2>Ranking de <span>duelos</span></h2>
+    <p>Ranking oficial de Magic Rampage basado en duelos registrados por los admins. Cada victoria suma o resta puntos Elo según el nivel del rival.</p>
+</div>
+
+<!-- ══ PODIO ══════════════════════════════════════════════ -->
+<section class="seccion" style="padding-bottom:24px;">
+    <div id="demoBanner" class="rk-aviso" hidden>Modo demostración: los datos son de ejemplo. Conecta Supabase en <b>auth.js</b> para ver el ranking real.</div>
+    <div id="podio" class="podio"></div>
+</section>
+
+<!-- ══ CLASIFICACIÓN + ENVÍO ══════════════════════════════ -->
+<div class="rk-layout">
+    <div class="panel-gamer">
+        <span class="seccion-eyebrow">CLASIFICACIÓN</span>
+        <h2 class="seccion-titulo" style="margin-bottom:24px;">Mejores <span>jugadores</span></h2>
+        <div class="rk-tools">
+            <input id="q" type="search" placeholder="Buscar jugador" aria-label="Buscar jugador">
+        </div>
+        <ol id="lista" class="rk-list"></ol>
+        <button id="mas" class="btn-gamer rk-mas" hidden>Ver más jugadores</button>
+    </div>
+
+    <div class="panel-gamer">
+        <span class="seccion-eyebrow">CÓMO FUNCIONA</span>
+        <h2 class="seccion-titulo" style="margin-bottom:24px;">Sistema <span>Elo</span></h2>
+        <ul class="rk-nota" style="list-style:none;display:grid;gap:12px;font-size:13px;color:#bbb;margin:0;">
+            <li><i class="fa-solid fa-hand-fist"></i> Solo cuentan los duelos oficiales que registran los admins.</li>
+            <li><i class="fa-solid fa-scale-balanced"></i> Ganarle a alguien mejor que tú da más puntos; perder contra alguien más débil quita más.</li>
+            <li><i class="fa-solid fa-flag-checkered"></i> Todos empiezan con 1000. Para aparecer necesitas al menos 3 duelos y haber jugado en los últimos 90 días.</li>
+            <li><i class="fa-solid fa-arrow-trend-up"></i> ▲ y ▼ muestran cuánto cambió tu Elo en los últimos 90 días.</li>
+            <li><i class="fa-solid fa-clipboard-check"></i> Los duelos anulados no cuentan, y cada duelo queda guardado con el admin que lo registró.</li>
+        </ul>
+    </div>
+</div>
+
+<!-- ══ FOOTER ════════════════════════════════════════════ -->
+<footer class="footer">
+    <div class="footer-grid">
+        <div>
+            <p class="footer-logo">GUARIDA <span>DRACONICA</span></p>
+            <p class="footer-slogan">Tu portal de noticias, torneos y eventos gamer.</p>
+            <div class="footer-redes">
+                <a href="https://www.facebook.com/share/g/1F5JUXiEAT/" class="footer-red"><i class="fa-brands fa-facebook"></i></a>
+                <a href="https://discord.gg/a877AMgH6" class="footer-red"><i class="fa-brands fa-discord"></i></a>
+                <a href="https://www.facebook.com/share/g/1JA7L7tTZp/" class="footer-red"><i class="fa-brands fa-facebook"></i></a>
+                <a href="https://chat.whatsapp.com/E2L1P5HkYa9Aog9ZKnJuWw?s=cl&p=a&iam=2" class="footer-red"><i class="fa-brands fa-whatsapp"></i></a>
+            </div>
+        </div>
+        <div class="footer-col">
+            <h4>Secciones</h4>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="noticias.html">Draconica Clan</a></li>
+                <li><a href="eventos.html">Eventos</a></li>
+                <li><a href="torneos.html">Torneos</a></li>
+                <li><a href="ranking.html">Ranking de Duelos</a></li>
+            <li><a href="tierlist.html">Tier list</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Cuenta</h4>
+            <ul>
+                <li><a href="registro.html">Registrarse</a></li>
+                <li><a href="login.html">Iniciar Sesión</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>© 2026 GUARIDA DRACONICA — Todos los derechos reservados</p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="auth.js"></script>
+<script src="script.js"></script>
+<script>
+const sb = window.sb;               // cliente compartido, configurado en auth.js
+const DEMO = !sb;
+const PAGE = 10;
+const state = { q: '', shown: PAGE, rows: [] };
+const $ = id => document.getElementById(id);
+const toast = msg => (window.Toast ? window.Toast(msg) : alert(msg));
+
+const DEMO_ROWS = [['Aldric', 1342, 18, 3, 42], ['Nyx', 1288, 15, 5, -12], ['Brasa', 1215, 12, 6, 30], ['Tomás', 1170, 9, 6, 8],
+    ['Lyra', 1102, 8, 7, -20], ['Kael', 1064, 6, 6, 0], ['Ónix', 1031, 5, 7, 14]]
+    .map(([nombre, elo, v, d, c], i) => ({ id: 'd' + i, clase: ['Guerrero', 'Mago', 'Arquero'][i % 3], nombre, elo, victorias: v, derrotas: d, porcentaje: Math.round(100 * v / (v + d)), cambio_90d: c }));
+
+/* ---------- Utilidades ---------- */
+function esc(s) { return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+
+/* ---------- Intro ---------- */
+function startIntro() {
+    const el = $('intro');
+    if (sessionStorage.getItem('introVista')) { el.remove(); return; }
+    sessionStorage.setItem('introVista', '1');
+    el.addEventListener('click', () => el.remove());
+    setTimeout(() => el.remove(), 2600);
+}
+
+/* ---------- Datos ---------- */
+async function loadRows() {
+    if (DEMO) { state.rows = DEMO_ROWS; render(); return; }
+    const { data, error } = await sb.from('ranking_oficial').select('*')
+        .order('elo', { ascending: false }).order('victorias', { ascending: false });
+    if (error) { toast('No se pudo cargar el ranking.'); return; }
+    state.rows = data; render();
+}
+
+/* ---------- Dibujo ---------- */
+function comboHTML(r) {
+    const imgs = [1, 2, 3].filter(n => /^https:\/\//.test(r['o' + n + '_img'] || ''))
+        .map(n => `<img src="${esc(r['o' + n + '_img'])}" alt="${esc(r['o' + n + '_nombre'])}" title="${esc(r['o' + n + '_nombre'])}" loading="lazy">`).join('');
+    const clase = r.clase ? `<span class="clase">${esc(r.clase)}</span>` : '';
+    return imgs || clase ? `<span class="combo">${imgs}${clase}</span>` : '';
+}
+function cambioHTML(c) { return c > 0 ? `<span class="sube">▲ ${c}</span>` : c < 0 ? `<span class="baja">▼ ${-c}</span>` : '<span>■ 0</span>'; }
+function podioHTML(rows) {
+    const slots = [[1, 'p2 plata', '.15s'], [0, 'p1 oro', '.3s'], [2, 'p3 bronce', '0s']];
+    return slots.map(([i, cls, d]) => {
+        const r = rows[i];
+        if (!r) return `<div class="pod ${cls} libre" style="--d:${d}"><div class="pos">${i + 1}.º</div><div class="quien">Libre</div></div>`;
+        const corona = i === 0 ? '<i class="fa-solid fa-crown"></i> ' : '';
+        return `<div class="pod ${cls}" style="--d:${d}"><div class="pos">${corona}${i + 1}.º</div>
+            <div class="quien">${esc(r.nombre)}</div>${comboHTML(r)}<div class="num">${r.elo}</div>
+            <div class="sub">${r.victorias}V - ${r.derrotas}D · ${cambioHTML(r.cambio_90d)}</div></div>`;
+    }).join('');
+}
+function filaHTML(r, i, min, max) {
+    const w = Math.round(8 + 92 * (r.elo - min) / Math.max(1, max - min));
+    return `<li class="tend-item" style="--i:${i}">
+        <div class="tend-info"><span class="tend-rank">#${r.rank}</span><span class="tend-nombre">${esc(r.nombre)}</span>${comboHTML(r)}<span class="tend-pct">${r.elo}</span></div>
+        <div class="tend-barra-fondo"><div class="tend-barra" data-w="${w}"></div></div>
+        <div class="rk-sub"><span>${r.victorias}V - ${r.derrotas}D (${r.porcentaje}%)</span><span>Últimos 90 días: ${cambioHTML(r.cambio_90d)}</span></div></li>`;
+}
+const observador = new IntersectionObserver(entradas => entradas.forEach(en => {
+    if (en.isIntersecting) { en.target.style.width = en.target.dataset.w + '%'; observador.unobserve(en.target); }
+}), { threshold: 0.2 });
+function animarBarras() { document.querySelectorAll('.rk-list .tend-barra').forEach(b => observador.observe(b)); }
+
+function render() {
+    const ranked = state.rows.map((r, i) => ({ ...r, rank: i + 1 }));
+    const elos = ranked.map(r => r.elo), min = Math.min(...elos, 1000), max = Math.max(...elos, 1000);
+    const q = state.q.trim().toLowerCase();
+    $('podio').style.display = q ? 'none' : '';
+    $('podio').innerHTML = podioHTML(ranked);
+    const pool = q ? ranked.filter(r => r.nombre.toLowerCase().includes(q)) : ranked.slice(3);
+    const visibles = pool.slice(0, state.shown);
+    $('lista').innerHTML = visibles.length ? visibles.map((r, i) => filaHTML(r, i, min, max)).join('')
+        : `<li class="rk-vacio">${q ? 'Ningún jugador coincide con esa búsqueda.' : 'Todavía no hay más jugadores en el ranking oficial. Se necesitan al menos 3 duelos registrados.'}</li>`;
+    $('mas').hidden = pool.length <= state.shown;
+    animarBarras();
+}
+
+/* ---------- Eventos ---------- */
+function bind() {
+    $('q').addEventListener('input', e => { state.q = e.target.value; state.shown = PAGE; render(); });
+    $('mas').addEventListener('click', () => { state.shown += PAGE; render(); });
+}
+function init() {
+    startIntro(); bind();
+    $('demoBanner').hidden = !DEMO;
+    loadRows();
+}
+init();
+</script>
+</body>
+</html>

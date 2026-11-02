@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GUARIDA DRACONICA | Torneos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/56663d21c5.js" crossorigin="anonymous"></script>
+    <link rel="shortcut icon" href="imagenes/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+ 
+<!-- ══ MODAL LOGIN ════════════════════════════════════════ -->
+<div class="modal-overlay" id="modalOverlay">
+    <form class="modal-caja" id="modalForm" novalidate>
+        <button type="button" class="modal-cerrar" id="modalCerrar">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <h3 class="modal-titulo">Iniciar <span>Sesión</span></h3>
+        <div class="modal-campo">
+            <label for="loginUsuario">Usuario</label>
+            <input type="text" id="loginUsuario" placeholder="Pepito_Perez23" autocomplete="username">
+            <span class="modal-error" id="errorUsuario"></span>
+        </div>
+        <div class="modal-campo">
+            <label for="loginPassword">Contraseña</label>
+            <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password">
+            <span class="modal-error" id="errorPassword"></span>
+        </div>
+        <button type="submit" class="modal-submit">Entrar</button>
+        <p class="modal-pie">¿No tienes cuenta? <a href="registro.html">Regístrate aquí</a></p>
+    </form>
+</div>
+ 
+<!-- ══ NAVBAR ═════════════════════════════════════════════ -->
+<header class="navbar-gamer">
+    <a href="index.html" class="logo">GUARIDA <span>DRACONICA</span></a>
+    <button class="hamburger" id="hamburger"><i class="fa-solid fa-bars"></i></button>
+    <nav>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="noticias.html">Draconica Clan</a></li>
+            <li><a href="eventos.html">Eventos</a></li>
+            <li><a href="torneos.html" class="active">Torneos</a></li>
+            <li><a href="ranking.html">Ranking de duelos</a></li>
+            <li><a href="tierlist.html">Tier list</a></li>
+        </ul>
+    </nav>
+    <div class="nav-actions">
+        <button class="btn-gamer btn-login" id="btnEntrar">iniciar sesión</button>
+        <a href="registro.html" class="btn-gamer btn-register">Registrarse</a>
+    </div>
+</header>
+ 
+<!-- ══ PAGE HERO ══════════════════════════════════════════ -->
+<div class="page-hero">
+    <span class="seccion-eyebrow"><i class="fa-solid fa-trophy"></i> COMPETENCIAS</span>
+    <h2>Torneos <span>Oficiales</span></h2>
+    <p>Compite en los mejores torneos gamer y demuestra tu nivel. Premios reales, rivales reales.</p>
+</div>
+ 
+<!-- ══ TORNEOS ════════════════════════════════════════════ -->
+<section class="seccion">
+    <div class="torneos-grid">
+ 
+        <div class="torneo-card">
+            <div class="torneo-header">
+                <div class="torneo-icono"><i class="fa-solid fa-crosshairs"></i></div>
+                <span class="torneo-prize">$500 USD</span>
+            </div>
+            <h3 class="torneo-nombre">Fortnite Championship</h3>
+            <div class="torneo-meta">
+                <span><i class="fa-solid fa-gamepad"></i> Battle Royale — Solo</span>
+                <span><i class="fa-regular fa-calendar"></i> 15 Julio 2026</span>
+                <span><i class="fa-regular fa-clock"></i> 18:00 BOT</span>
+                <span><i class="fa-solid fa-users"></i> 64 cupos — 12 inscritos</span>
+            </div>
+            <span class="torneo-estado estado-abierto">✔ Inscripciones abiertas</span>
+            <a href="registro.html" class="torneo-btn">Registrarse para competir</a>
+        </div>
+ 
+        <div class="torneo-card">
+            <div class="torneo-header">
+                <div class="torneo-icono"><i class="fa-solid fa-bomb"></i></div>
+                <span class="torneo-prize">$300 USD + Skins</span>
+            </div>
+            <h3 class="torneo-nombre">Counter Strike 2 Cup</h3>
+            <div class="torneo-meta">
+                <span><i class="fa-solid fa-gamepad"></i> 5 vs 5 Competitivo</span>
+                <span><i class="fa-regular fa-calendar"></i> 20 Julio 2026</span>
+                <span><i class="fa-regular fa-clock"></i> 20:00 BOT</span>
+                <span><i class="fa-solid fa-users"></i> 16 equipos — 9 inscritos</span>
+            </div>
+            <span class="torneo-estado estado-abierto">✔ Inscripciones abiertas</span>
+            <a href="registro.html" class="torneo-btn">Registrarse para competir</a>
+        </div>
+ 
+        <div class="torneo-card">
+            <div class="torneo-header">
+                <div class="torneo-icono"><i class="fa-solid fa-skull"></i></div>
+                <span class="torneo-prize">$200 USD</span>
+            </div>
+            <h3 class="torneo-nombre">Left 4 Dead 2 Survival</h3>
+            <div class="torneo-meta">
+                <span><i class="fa-solid fa-gamepad"></i> Cooperativo — Equipos de 4</span>
+                <span><i class="fa-regular fa-calendar"></i> 25 Julio 2026</span>
+                <span><i class="fa-regular fa-clock"></i> 19:00 BOT</span>
+                <span><i class="fa-solid fa-users"></i> 8 equipos — 8 inscritos</span>
+            </div>
+            <span class="torneo-estado estado-lleno">⚠ Cupos llenos</span>
+            <button class="torneo-btn deshabilitado" disabled>Sin cupos disponibles</button>
+        </div>
+ 
+        <div class="torneo-card">
+            <div class="torneo-header">
+                <div class="torneo-icono"><i class="fa-solid fa-dragon"></i></div>
+                <span class="torneo-prize">$1,000 USD</span>
+            </div>
+            <h3 class="torneo-nombre">Dota 2 Clash</h3>
+            <div class="torneo-meta">
+                <span><i class="fa-solid fa-gamepad"></i> Ranked — Equipos de 5</span>
+                <span><i class="fa-regular fa-calendar"></i> 28 Julio 2026</span>
+                <span><i class="fa-regular fa-clock"></i> 17:00 BOT</span>
+                <span><i class="fa-solid fa-users"></i> 16 equipos — 5 inscritos</span>
+            </div>
+            <span class="torneo-estado estado-abierto">✔ Inscripciones abiertas</span>
+            <a href="registro.html" class="torneo-btn">Registrarse para competir</a>
+        </div>
+ 
+        <div class="torneo-card">
+            <div class="torneo-header">
+                <div class="torneo-icono"><i class="fa-solid fa-gun"></i></div>
+                <span class="torneo-prize">$400 USD</span>
+            </div>
+            <h3 class="torneo-nombre">Valorant Invitational</h3>
+            <div class="torneo-meta">
+                <span><i class="fa-solid fa-gamepad"></i> 5 vs 5 Táctico</span>
+                <span><i class="fa-regular fa-calendar"></i> 10 Agosto 2026</span>
+                <span><i class="fa-regular fa-clock"></i> 19:00 BOT</span>
+                <span><i class="fa-solid fa-users"></i> 16 equipos — 2 inscritos</span>
+            </div>
+            <span class="torneo-estado estado-proximo">⏳ Abre pronto</span>
+            <button class="torneo-btn deshabilitado" disabled>Inscripciones próximamente</button>
+        </div>
+ 
+        <div class="torneo-card">
+            <div class="torneo-header">
+                <div class="torneo-icono"><i class="fa-solid fa-chess"></i></div>
+                <span class="torneo-prize">$150 USD</span>
+            </div>
+            <h3 class="torneo-nombre">Minecraft Build Battle</h3>
+            <div class="torneo-meta">
+                <span><i class="fa-solid fa-gamepad"></i> Construcción — Solo</span>
+                <span><i class="fa-regular fa-calendar"></i> 05 Agosto 2026</span>
+                <span><i class="fa-regular fa-clock"></i> 15:00 BOT</span>
+                <span><i class="fa-solid fa-users"></i> 32 cupos — 18 inscritos</span>
+            </div>
+            <span class="torneo-estado estado-abierto">✔ Inscripciones abiertas</span>
+            <a href="registro.html" class="torneo-btn">Registrarse para competir</a>
+        </div>
+ 
+    </div>
+ 
+    <!-- REQUISITOS -->
+    <div class="requisitos-box">
+        <h3><i class="fa-solid fa-clipboard-list"></i> Requisitos de participación</h3>
+        <ul>
+            <li>Cuenta registrada en Zona Gamer (activa y verificada)</li>
+            <li>Conexión estable a internet — mínimo 10 Mbps recomendado</li>
+            <li>Respetar las reglas del torneo y el código de conducta</li>
+            <li>Edad mínima: 16 años para participar</li>
+            <li>Los premios en efectivo se pagan vía PayPal o transferencia bancaria</li>
+        </ul>
+    </div>
+</section>
+ 
+<!-- ══ FOOTER ════════════════════════════════════════════ -->
+<footer class="footer">
+    <div class="footer-grid">
+        <div>
+            <p class="footer-logo">GUARIDA <span>DRACONICA</span></p>
+            <p class="footer-slogan">Tu portal de noticias gamer y mas unete a nuestras alianzas </p>
+            <div class="footer-redes">
+                <a href="https://www.facebook.com/share/g/1F5JUXiEAT/" class="footer-red"><i class="fa-brands fa-facebook"></i></a>
+                <a href="https://discord.gg/a877AMgH6" class="footer-red"><i class="fa-brands fa-discord"></i></a>
+                <a href="https://www.facebook.com/share/g/1JA7L7tTZp/" class="footer-red"><i class="fa-brands fa-facebook"></i></a>
+                <a href="https://chat.whatsapp.com/E2L1P5HkYa9Aog9ZKnJuWw?s=cl&p=a&iam=2" class="footer-red"><i class="fa-brands fa-whatsapp"></i></a>
+            </div>
+        </div>
+        <div class="footer-col">
+            <h4>Secciones</h4>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="noticias.html">Draconica Clan</a></li>
+                <li><a href="eventos.html">Eventos</a></li>
+                <li><a href="torneos.html">Torneos</a></li>
+                <li><a href="ranking.html">Ranking de Duelos</a></li>
+                <li><a href="tierlist.html">Tier list</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Cuenta</h4>
+            <ul>
+                <li><a href="registro.html">Registrarse</a></li>
+                <li><a href="login.html">Iniciar Sesión</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>© 2026 GUARIDA DRACONICA — Todos los derechos reservados</p>
+    </div>
+</footer>
+ 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="auth.js"></script>
+<script src="contenido.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

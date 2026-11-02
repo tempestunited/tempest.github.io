@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GUARIDA DEL DRAGON | Portal de la comunidad tempest</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/56663d21c5.js" crossorigin="anonymous"></script>
+    <link rel="shortcut icon" href="imagenes/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!-- ══ MODAL LOGIN ════════════════════════════════════════ -->
+<div class="modal-overlay" id="modalOverlay">
+    <form class="modal-caja" id="modalForm" novalidate>
+        <button type="button" class="modal-cerrar" id="modalCerrar">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <h3 class="modal-titulo">Iniciar <span>Sesión</span></h3>
+        <div class="modal-campo">
+            <label for="loginUsuario">Usuario</label>
+            <input type="text" id="loginUsuario" placeholder="Pepito_Perez23" autocomplete="username">
+            <span class="modal-error" id="errorUsuario"></span>
+        </div>
+        <div class="modal-campo">
+            <label for="loginPassword">Contraseña</label>
+            <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password">
+            <span class="modal-error" id="errorPassword"></span>
+        </div>
+        <button type="submit" class="modal-submit">Entrar</button>
+        <p class="modal-pie">¿No tienes cuenta? <a href="registro.html">Regístrate aquí</a></p>
+    </form>
+</div>
+ 
+<!-- ══ NAVBAR ═════════════════════════════════════════════ -->
+<header class="navbar-gamer">
+    <a href="index.html" class="logo">GUARIDA <span>DRACONICA</span></a>
+ 
+    <button class="hamburger" id="hamburger" aria-label="Abrir menú">
+        <i class="fa-solid fa-bars"></i>
+    </button>
+ 
+    <nav>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html" class="active">Inicio</a></li>
+            <li><a href="noticias.html">Draconica Clan</a></li>
+            <li><a href="eventos.html">Eventos</a></li>
+            <li><a href="torneos.html">Torneos</a></li>
+            <li><a href="ranking.html">ranking de duelos</a></li>
+            <li><a href="tierlist.html">Tier list</a></li>
+        </ul>
+    </nav>
+ 
+    <div class="nav-actions">
+        <button class="btn-gamer btn-login" id="btnEntrar">iniciar sesión</button>
+        <a href="registro.html" class="btn-gamer btn-register">Registrarse</a>
+    </div>
+</header>
+ 
+<!-- ══ HERO ═══════════════════════════════════════════════ -->
+<section class="hero">
+    <div class="hero-content">
+        <span class="hero-eyebrow">COMUNIDAD EN VIVO</span>
+        <h1>Descubre el mundo<br><span class="glow">gamer</span> en un solo lugar</h1>
+        <p>Noticias, eventos, torneos y tendencias en pelicula y en el mundo magic rampage<br>de lo mas importante dentro de magic rampage,minecraft y skullgirls</p>
+        <div class="hero-buttons">
+            <a href="eventos.html" class="btn-gamer">
+                <i class="fa-solid fa-calendar-days"></i> Ver Eventos
+            </a>
+            <a href="noticias.html" class="btn-gamer btn-outline">
+                <i class="fa-solid fa-newspaper"></i> Ver clanes disponibles
+            </a>
+        </div>
+        <div class="hero-stats">
+            <div>
+                <span class="hero-stat-num">400+</span>
+                <span class="hero-stat-label">Jugadores</span>
+            </div>
+            <div>
+                <span class="hero-stat-num">¡nuevas</span>
+                <span class="hero-stat-label">Noticias!</span>
+            </div>
+            <div>
+                <span class="hero-stat-num">proximos</span>
+                <span class="hero-stat-label">Torneos a futuro</span>
+            </div>
+        </div>
+    </div>
+</section>
+ 
+<!-- ══ TICKER ═════════════════════════════════════════════ -->
+<div class="ticker">
+    <span class="ticker-label"><i class="fa-solid fa-bolt"></i> BREAKING</span>
+    <div class="ticker-pista">
+        <span class="ticker-texto">
+            !fecha confirmada del torneo¡ &nbsp;•&nbsp;
+            nuevo evento de mazmorra semanal &nbsp;•&nbsp;
+            se abrira una nueva galeria de spedrun &nbsp;•&nbsp;
+            diciembre proximamente se abrira oficialmente las inscripciones para el torneo MRL &nbsp;•&nbsp;
+            nuevas guias de combinaciones sobre la nueva arma de mazmorra semanal &nbsp;•&nbsp;
+            los fines de semana pasaremos peliculas para nuestros queridos rampagers &nbsp;•&nbsp;
+            !fecha confirmada del torneo¡ &nbsp;•&nbsp;
+            nuevo evento de mazmorra semanal &nbsp;•&nbsp;
+            oficialmente se abre una nueva galeria  de recuerdos para ver su antiguo ranking spedrunner &nbsp;•&nbsp;
+            diciembre proximamente se abrira oficialmente las inscripciones para el torneo MRL &nbsp;•&nbsp;
+        </span>
+    </div>
+</div>
+ 
+<!-- ══ NOTICIAS ═══════════════════════════════════════════ -->
+<section class="seccion" id="noticias">
+    <span class="seccion-eyebrow">NOTICIAS RECIENTES</span>
+    <h2 class="seccion-titulo">Últimas <span>novedades</span></h2>
+    <div class="grid-noticias">
+ 
+        <article class="card-noticia">
+            <div class="card-noticia__img img-gta">
+                <span class="card-badge">DESTACADO</span>
+            </div>
+            <div class="card-noticia__body">
+                <span class="card-categoria">MRL</span>
+                <h3 class="card-titulo">fecha confirmada para el torneo MRL</h3>
+                <p class="card-texto">la administracion del torneo que se estara organizando confirmaron que ahora en enero se estara dando el torneo mas grande de magic rampage con una reecompensa para el primer lugar de 32k fichas</p>
+                <a class="card-link" href="#">Leer más <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </article>
+ 
+        <article class="card-noticia">
+            <div class="card-noticia__img img-gow">
+                <span class="card-badge card-badge--nuevo">NUEVO</span>
+            </div>
+            <div class="card-noticia__body">
+                <span class="card-categoria">se anuncio nuevo evento de mazmorra semanal</span>
+                <h3 class="card-titulo">Nuevo: colmillo de ceniza</h3>
+                <p class="card-texto">asantee ahora nos trae el evento de mazmorra semanal con la nueva arma asi que esten preparandose speedrunners</p>
+                <a class="card-link" href="#">Leer más <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </article>
+ 
+        <article class="card-noticia">
+            <div class="card-noticia__img img-wolver">
+                <span class="card-badge card-badge--hot">🔥 HOT</span>
+            </div>
+            <div class="card-noticia__body">
+                <span class="card-categoria">salon de honor de tempest</span>
+                <h3 class="card-titulo">nueva pestaña para la pagina</h3>
+                <p class="card-texto">se confirma nueva pestaña para la pagina web para que los speedrunners puedan ver en que posicion quedaron en el top mediante una galeria de fotos de recuerdo.</p>
+                <a class="card-link" href="#">Leer más <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </article>
+ 
+    </div>
+    <div style="text-align:center; margin-top:32px;">
+        <a href="noticias.html" class="btn-gamer">Ver todos los clanes de la comunidad </a>
+    </div>
+</section>
+ 
+<!-- ══ FOOTER ════════════════════════════════════════════ -->
+<footer class="footer">
+    <div class="footer-grid">
+        <div>
+            <p class="footer-logo">GUARIDA <span>DRACONICA</span></p>
+            <p class="footer-slogan">Tu portal de noticias, torneos y eventos gamer. Siempre conectado con el mundo magic rampage y mucho mas.</p>
+            <div class="footer-redes">
+               <a href="https://www.facebook.com/share/g/1F5JUXiEAT/" class="footer-red"><i class="fa-brands fa-facebook"></i></a>
+                <a href="https://discord.gg/a877AMgH6" class="footer-red"><i class="fa-brands fa-discord"></i></a>
+                <a href="https://www.facebook.com/share/g/1JA7L7tTZp/" class="footer-red"><i class="fa-brands fa-facebook"></i></a>
+                <a href="https://chat.whatsapp.com/E2L1P5HkYa9Aog9ZKnJuWw?s=cl&p=a&iam=2" class="footer-red"><i class="fa-brands fa-whatsapp"></i></a>
+            </div>
+        </div>
+        <div class="footer-col">
+            <h4>Secciones</h4>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="noticias.html">Draconica Clanes</a></li>
+                <li><a href="eventos.html">Eventos</a></li>
+                <li><a href="torneos.html">Torneos</a></li>
+                <li><a href="ranking.html">Ranking de Duelos</a></li>
+            <li><a href="tierlist.html">Tier list</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Cuenta</h4>
+            <ul>
+                <li><a href="registro.html">Registrarse</a></li>
+                <li><a href="login.html">Iniciar Sesión</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>© 2026 GUARIDA DRACONICA — Todos los derechos reservados-- La pagina sigue en construccion :) asi que si ve errores disculpenos</p>
+    </div>
+</footer>
+ 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="auth.js"></script>
+<script src="contenido.js"></script>
+<script src="script.js"></script>
+</body>
+
