@@ -34,6 +34,17 @@
         .tag.cl { background: rgba(0,229,255,.12); color: var(--cian); }
         .fila .mini { display: inline-flex; gap: 4px; vertical-align: middle; margin-left: 8px; }
         .fila .mini img { width: 26px; height: 26px; border-radius: 6px; object-fit: cover; border: 1px solid #330055; }
+        .gal-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 10px; }
+        .gal-item { position: relative; display: grid; gap: 4px; padding: 6px; background: var(--panel); border: 2px solid var(--borde); border-radius: 10px; }
+        .gal-item.sel { border-color: var(--cian); box-shadow: 0 0 12px rgba(0,229,255,.4); }
+        .gal-img { padding: 0; border: 0; background: #12002a; border-radius: 8px; overflow: hidden; cursor: pointer; aspect-ratio: 1; }
+        .gal-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .gal-nom { font-size: 11px; color: #bbb; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .gal-acc { position: absolute; top: 9px; right: 9px; display: flex; gap: 4px; }
+        .gal-b { width: 22px; height: 22px; border: 0; border-radius: 6px; background: rgba(0,0,0,.7); color: #fff; cursor: pointer; font-size: 12px; }
+        .gal-b:hover { background: var(--rojo); }
+        .elegida { display: inline-flex; align-items: center; gap: 8px; margin-top: 6px; font-size: 12px; color: var(--cian); }
+        .elegida img { width: 34px; height: 34px; border-radius: 6px; object-fit: cover; }
         .cform { max-width: 760px; }
         .cform .form-campo textarea, .cform .form-campo select { width: 100%; background: #12002a; border: 1.5px solid #330055; border-radius: 8px; padding: 11px 14px; color: #fff; font: 14px "Montserrat", sans-serif; }
         .cform .form-campo input[type=checkbox] { width: auto; }
@@ -81,6 +92,7 @@
         <button class="filtro-btn" data-tab="duelos"><i class="fa-solid fa-hand-fist"></i> Duelos</button>
         <button class="filtro-btn" data-tab="combos"><i class="fa-solid fa-shield-halved"></i> Combinaciones</button>
         <button class="filtro-btn" data-tab="contenido"><i class="fa-solid fa-pen-to-square"></i> Contenido</button>
+        <button class="filtro-btn" data-tab="galeria"><i class="fa-solid fa-images"></i> Galería</button>
         <button class="filtro-btn" data-tab="ranking"><i class="fa-solid fa-trophy"></i> Rachas</button>
         <button class="filtro-btn" data-tab="reportes"><i class="fa-solid fa-flag"></i> Reportes</button>
         <button class="filtro-btn" data-tab="usuarios"><i class="fa-solid fa-users"></i> Usuarios y admins</button>
@@ -114,6 +126,8 @@
         <form id="formObjeto" class="barra">
             <input id="oNombre" placeholder="Nombre del objeto" maxlength="40" aria-label="Nombre del objeto">
             <input id="oFoto" type="file" accept="image/png,image/jpeg,image/webp" aria-label="Foto del objeto">
+            <button type="button" class="btn-gamer" data-a="elegir-galeria" data-id="objeto">Elegir de la galería</button>
+            <span id="oElegida"></span>
             <button type="submit" class="btn-gamer" id="oGo">Subir objeto</button>
         </form>
         <div id="listaObjetos"></div>
@@ -159,6 +173,38 @@
         <div id="listaCont"></div>
     </section>
 
+    <section id="tab-galeria" style="display:none">
+        <p class="vacio" style="text-align:left;padding:0 0 14px">Aquí se guardan las fotos que subes. Reutilízalas al crear fichas (botón "Elegir de la galería") o selecciona varias y crea muchas fichas de tier list de una sola vez.</p>
+        <form id="formGal" class="barra">
+            <input id="galFotos" type="file" multiple accept="image/png,image/jpeg,image/webp" aria-label="Fotos a subir">
+            <select id="galCarpeta" aria-label="Carpeta"><option value="tierlist">Tier list</option><option value="competitivo">Tier competitivo</option><option value="ranking">Ranking</option><option value="clases">Clases</option><option value="otros">Otros</option></select>
+            <button type="submit" class="btn-gamer" id="galGo">Subir fotos</button>
+            <button type="button" class="btn-gamer" id="galImportar">Importar las ya usadas</button>
+        </form>
+        <div class="filtros" id="filtrosGal">
+            <button class="filtro-btn active" data-car="todas">Todas</button>
+            <button class="filtro-btn" data-car="tierlist">Tier list</button>
+            <button class="filtro-btn" data-car="competitivo">Tier competitivo</button>
+            <button class="filtro-btn" data-car="ranking">Ranking</button>
+            <button class="filtro-btn" data-car="clases">Clases</button>
+            <button class="filtro-btn" data-car="otros">Otros</button>
+        </div>
+        <div class="barra"><input id="qGal" type="search" placeholder="Buscar foto" aria-label="Buscar foto"></div>
+        <div id="galMasiva" class="panel-gamer" style="display:none;margin-bottom:16px">
+            <p id="galSelTxt" style="margin-bottom:10px;font-size:13px"></p>
+            <div class="barra" style="margin-bottom:0">
+                <select id="mDestino" aria-label="Destino"><option value="tier">Tier list</option><option value="tier_comp">Tier competitivo</option></select>
+                <select id="mClase" aria-label="Clase" style="display:none"><option value="">Clase</option><option value="guarda">Guarda</option><option value="sacerdote">Sacerdote</option><option value="brujo">Brujo</option><option value="mago_oscuro">Mago oscuro</option><option value="picaro">Pícaro</option><option value="ladron">Ladrón</option><option value="guerrero">Guerrero</option><option value="mago">Mago</option><option value="druida">Druida</option><option value="paladin">Paladín</option><option value="alto_mago">Alto mago</option><option value="guerrero_elite">Guerrero de élite</option><option value="hechicero">Hechicero</option></select>
+                <select id="mLista" aria-label="Lista"><option value="arma">Armas</option><option value="armadura">Armaduras</option><option value="anillo">Anillos</option><option value="tonico">Tónicos</option></select>
+                <select id="mSub" aria-label="Tipo de arma"><option value="baston">Bastones y grimorios</option><option value="espada">Espadas</option><option value="daga">Dagas y shurikens</option><option value="hacha">Hachas</option><option value="lanza">Lanzas</option><option value="martillo">Martillos y mazas</option></select>
+                <select id="mTier" aria-label="Tier"><option>S</option><option>A</option><option selected>B</option><option>C</option><option>D</option><option>E</option></select>
+                <button type="button" class="btn-gamer" id="mCrear">Crear fichas</button>
+                <button type="button" class="btn-gamer" id="mLimpiar">Quitar selección</button>
+            </div>
+        </div>
+        <div class="gal-grid" id="galGrid"></div>
+    </section>
+
     <section id="tab-ranking" style="display:none">
         <div class="filtros" id="filtros">
             <button class="filtro-btn active" data-filtro="pendientes">Pendientes</button>
@@ -181,6 +227,18 @@
     </section>
 </main>
 
+<div class="modal-overlay" id="galOverlay">
+    <div class="modal-caja" style="max-width:760px;width:94vw">
+        <button type="button" class="modal-cerrar" id="galCerrar" aria-label="Cerrar"><i class="fa-solid fa-xmark"></i></button>
+        <h3 class="modal-titulo">Elegir de la <span>galería</span></h3>
+        <div class="barra">
+            <input id="galQ" type="search" placeholder="Buscar foto" aria-label="Buscar foto">
+            <select id="galCar" aria-label="Carpeta"><option value="todas">Todas</option><option value="tierlist">Tier list</option><option value="competitivo">Tier competitivo</option><option value="ranking">Ranking</option><option value="clases">Clases</option><option value="otros">Otros</option></select>
+        </div>
+        <div class="gal-grid" id="galPicker" style="max-height:55vh;overflow:auto"></div>
+    </div>
+</div>
+
 <datalist id="paginasSitio">
     <option value="index.html">Inicio</option>
     <option value="noticias.html">Draconica Clan</option>
@@ -199,7 +257,7 @@
 const sb = window.sb;
 const $ = id => document.getElementById(id);
 const toast = m => window.Toast(m);
-const S = { user: null, rol: null, envios: [], reportes: [], perfiles: [], admins: [], jugadores: [], duelos: [], objetos: [], contenido: [], textos: [], cont: { sec: 'noticias', edit: null }, qj: '', filtro: 'pendientes', q: '', qu: '' };
+const S = { user: null, rol: null, envios: [], reportes: [], perfiles: [], admins: [], jugadores: [], duelos: [], objetos: [], contenido: [], textos: [], galeria: [], car: 'todas', qg: '', sel: new Set(), elegida: null, elegidaObj: null, picker: null, cont: { sec: 'noticias', edit: null }, qj: '', filtro: 'pendientes', q: '', qu: '' };
 
 /* ---------- Utilidades ---------- */
 function esc(s) { return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
@@ -236,7 +294,7 @@ async function salir() { await sb.auth.signOut(); }
 
 /* ---------- Carga de datos ---------- */
 async function cargarTodo() {
-    const [e, r, p, a, jg, du, ob, ct, tx] = await Promise.all([
+    const [e, r, p, a, jg, du, ob, ct, tx, ga] = await Promise.all([
         sb.from('submissions').select('*').order('created_at', { ascending: false }).limit(500),
         sb.from('reports').select('id, reason, created_at, record_id, submissions(username, streak, evidence_url, hidden)').order('created_at', { ascending: false }),
         sb.from('perfiles').select('id, usuario, creado_en').order('creado_en', { ascending: false }),
@@ -245,10 +303,11 @@ async function cargarTodo() {
         sb.from('duelos').select('*').order('jugado_en', { ascending: false }).limit(200),
         sb.from('objetos').select('*').order('nombre'),
         sb.from('contenido').select('*').order('orden'),
-        sb.from('textos').select('*')
+        sb.from('textos').select('*'),
+        sb.from('galeria').select('*').order('creado_en', { ascending: false }).limit(1000)
     ]);
-    if (e.error || r.error || p.error || a.error || jg.error || du.error || ob.error || ct.error || tx.error) toast('Algunos datos no cargaron. ¿Ejecutaste supabase-admin.sql y supabase-elo.sql?');
-    S.envios = e.data || []; S.reportes = r.data || []; S.perfiles = p.data || []; S.admins = a.data || []; S.jugadores = jg.data || []; S.duelos = du.data || []; S.objetos = ob.data || []; S.contenido = ct.data || []; S.textos = tx.data || [];
+    if (e.error || r.error || p.error || a.error || jg.error || du.error || ob.error || ct.error || tx.error || ga.error) toast('Algunos datos no cargaron. ¿Ejecutaste supabase-admin.sql y supabase-elo.sql?');
+    S.envios = e.data || []; S.reportes = r.data || []; S.perfiles = p.data || []; S.admins = a.data || []; S.jugadores = jg.data || []; S.duelos = du.data || []; S.objetos = ob.data || []; S.contenido = ct.data || []; S.textos = tx.data || []; S.galeria = ga.data || [];
     pintarTodo();
 }
 
@@ -317,7 +376,7 @@ function pintarElo() {
         const [txt, cls] = estadoJugador(j), n = j.victorias + j.derrotas;
         const pct = n ? Math.round(100 * j.victorias / n) : 0;
         return `<div class="fila sin-img"><div><h4>#${pos} ${esc(j.nombre)} · Elo ${Math.round(j.elo)}<span class="tag ${cls}">${txt}</span>${comboMini(j)}</h4>
-            <small>${j.victorias}V - ${j.derrotas}D (${pct}%) · ${j.ultimo_duelo ? 'último duelo: ' + fecha(j.ultimo_duelo) : 'sin duelos'}</small></div><div></div></div>`;
+            <small>${j.victorias}V - ${j.derrotas}D (${pct}%) · ${j.ultimo_duelo ? 'último duelo: ' + fecha(j.ultimo_duelo) : 'sin duelos'}</small></div><div class="acc"><button class="btn-gamer" data-a="renombrar-jug" data-id="${j.id}">Renombrar</button></div></div>`;
     }).join('');
     $('listaElo').innerHTML = html || '<p class="vacio">Aún no hay jugadores. Añade el primero arriba.</p>';
 }
@@ -398,16 +457,22 @@ async function subirObjeto(e) {
     e.preventDefault();
     const nombre = $('oNombre').value.trim(), f = $('oFoto').files[0], btn = $('oGo');
     if (nombre.length < 2 || nombre.length > 40) { toast('El nombre debe tener entre 2 y 40 caracteres.'); return; }
-    if (!fotoValida(f)) { toast('La foto debe ser PNG, JPG o WEBP de hasta 2 MB.'); return; }
+    if (!f && !S.elegidaObj) { toast('Sube una foto o elígela de la galería.'); return; }
+    if (f && !fotoValida(f)) { toast('La foto debe ser PNG, JPG o WEBP de hasta 2 MB.'); return; }
     btn.disabled = true;
     try {
-        const ext = f.type === 'image/png' ? 'png' : f.type === 'image/webp' ? 'webp' : 'jpg';
-        const ruta = crypto.randomUUID() + '.' + ext;
-        const up = await sb.storage.from('objetos').upload(ruta, f, { contentType: f.type });
-        if (up.error) throw up.error;
-        const url = sb.storage.from('objetos').getPublicUrl(ruta).data.publicUrl;
+        let url = S.elegidaObj ? S.elegidaObj.imagen_url : null, ruta = null;
+        if (f) {
+            const ext = f.type === 'image/png' ? 'png' : f.type === 'image/webp' ? 'webp' : 'jpg';
+            ruta = crypto.randomUUID() + '.' + ext;
+            const up = await sb.storage.from('objetos').upload(ruta, f, { contentType: f.type });
+            if (up.error) throw up.error;
+            url = sb.storage.from('objetos').getPublicUrl(ruta).data.publicUrl;
+        }
         const { error } = await sb.from('objetos').insert({ nombre, imagen_url: url });
-        if (error) { await sb.storage.from('objetos').remove([ruta]); throw error; }
+        if (error) { if (ruta) await sb.storage.from('objetos').remove([ruta]); throw error; }
+        if (f) await registrarGaleria(nombre, 'ranking', url);
+        S.elegidaObj = null; $('oElegida').innerHTML = '';
         $('formObjeto').reset(); toast('Objeto añadido.'); await cargarTodo();
     } catch (err) {
         toast(err.code === '23505' ? 'Ya existe un objeto con ese nombre.' : 'No se pudo subir el objeto.');
@@ -418,8 +483,6 @@ async function borrarObjeto(id) {
     if (!confirm(`¿Eliminar "${o.nombre}"? Se quitará de las combinaciones que lo usen.`)) return;
     const { data, error } = await sb.from('objetos').delete().eq('id', id).select();
     if (error || !data.length) { toast('No se pudo eliminar.'); return; }
-    const i = o.imagen_url.indexOf('/objetos/');
-    if (i >= 0) await sb.storage.from('objetos').remove([decodeURIComponent(o.imagen_url.slice(i + 9))]);
     toast('Objeto eliminado.'); await cargarTodo();
 }
 async function guardarCombo(e) {
@@ -468,13 +531,14 @@ function campoHTML([col, rotulo, tipo, ops], r) {
     let ctl;
     if (tipo === 'area') ctl = `<textarea id="f_${col}" rows="4" maxlength="1200">${esc(v)}</textarea>`;
     else if (tipo === 'sel') ctl = `<select id="f_${col}">${ops.map(([k, t]) => `<option value="${k}"${k === v ? ' selected' : ''}>${t}</option>`).join('')}</select>`;
-    else if (tipo === 'file') ctl = `<input id="f_${col}" type="file" accept="image/png,image/jpeg,image/webp">${r && r.imagen_url ? '<small>Ya tiene imagen: sube otra solo si quieres cambiarla.</small>' : ''}`;
+    else if (tipo === 'file') ctl = `<input id="f_${col}" type="file" accept="image/png,image/jpeg,image/webp">${r && r.imagen_url ? '<small>Ya tiene imagen: sube otra solo si quieres cambiarla.</small>' : ''}<div><button type="button" class="btn-gamer" data-a="elegir-galeria" data-id="cont" style="margin-top:8px;padding:6px 14px;font-size:12px">Elegir de la galería</button><span id="f_imagen_elegida"></span></div>`;
     else if (tipo === 'enlace') ctl = `<input id="f_${col}" type="text" list="paginasSitio" value="${esc(v)}" maxlength="300" placeholder="torneos.html o https://…">`;
     else if (tipo === 'check') ctl = `<input id="f_${col}" type="checkbox"${v ? ' checked' : ''}>`;
     else ctl = `<input id="f_${col}" type="${tipo}" value="${esc(v)}" maxlength="120">`;
     return `<div class="form-campo"><label for="f_${col}">${rotulo}</label>${ctl}</div>`;
 }
 function pintarFormCont() {
+    S.elegida = null;
     const sec = S.cont.sec, r = S.cont.edit, esTexto = sec === 'textos';
     document.querySelectorAll('#filtrosCont .filtro-btn').forEach(b => b.classList.toggle('active', b.dataset.sec === sec));
     mostrar($('formCont'), !esTexto); mostrar($('formTextos'), esTexto); mostrar($('listaCont'), !esTexto);
@@ -526,16 +590,17 @@ async function guardarCont(e) {
     if (sec.startsWith('tier')) fila.actualizado_en = new Date().toISOString();
     if (sec === 'tier' && fila.categoria !== 'arma') fila.subtipo = null;
     const f = $('f_imagen') ? $('f_imagen').files[0] : null;
+    if (!f && S.elegida) { fila.imagen_url = S.elegida.imagen_url; fila.img_clase = null; }
     if (f && !fotoValida(f)) { toast('La imagen debe ser PNG, JPG o WEBP de hasta 2 MB.'); return; }
     const btn = $('guardarCont'); btn.disabled = true;
-    let subida = null;
+    let subida = null, galNueva = false;
     try {
         if (f) {
             const ext = f.type === 'image/png' ? 'png' : f.type === 'image/webp' ? 'webp' : 'jpg';
             subida = 'contenido/' + crypto.randomUUID() + '.' + ext;
             const up = await sb.storage.from('objetos').upload(subida, f, { contentType: f.type });
             if (up.error) throw up.error;
-            fila.imagen_url = sb.storage.from('objetos').getPublicUrl(subida).data.publicUrl; fila.img_clase = null;
+            fila.imagen_url = sb.storage.from('objetos').getPublicUrl(subida).data.publicUrl; fila.img_clase = null; galNueva = true;
         }
         let res;
         if (r) res = await sb.from('contenido').update(fila).eq('id', r.id).select();
@@ -544,7 +609,7 @@ async function guardarCont(e) {
             res = await sb.from('contenido').insert({ ...fila, seccion: sec, orden, img_clase: fila.img_clase ?? (sec === 'torneos' ? 'fa-trophy' : null) }).select();
         }
         if (res.error || !res.data.length) throw res.error || new Error('sin permiso');
-        if (f && r && r.imagen_url) borrarArchivo(r.imagen_url);
+        if (galNueva) await registrarGaleria(fila.titulo, CARPETA_DE[sec] || 'otros', fila.imagen_url);
         toast('Ficha guardada.'); S.cont.edit = null; await cargarTodo(); pintarFormCont();
     } catch (err) {
         console.error(err); if (subida) sb.storage.from('objetos').remove([subida]);
@@ -577,7 +642,7 @@ async function borrarCont(id) {
     if (!confirm(`¿Eliminar "${r.titulo}" del sitio? No se puede deshacer.`)) return;
     const { data, error } = await sb.from('contenido').delete().eq('id', id).select();
     if (error || !data.length) { toast('No se pudo eliminar.'); return; }
-    borrarArchivo(r.imagen_url); S.contenido = S.contenido.filter(x => x.id !== id);
+    S.contenido = S.contenido.filter(x => x.id !== id);
     if (S.cont.edit && S.cont.edit.id === id) S.cont.edit = null;
     pintarFormCont(); toast('Ficha eliminada.');
 }
@@ -592,7 +657,126 @@ async function moverCont(id, dir) {
     await cargarTodo();
 }
 
-function pintarTodo() { pintarStats(); pintarElo(); pintarDuelos(); poblarSelects(); pintarObjetos(); poblarCombo(); pintarListaCont(); if (!$('camposCont').innerHTML) pintarFormCont(); pintarEnvios(); pintarReportes(); pintarUsuarios(); }
+/* ---------- Galería de fotos ---------- */
+const CARPETA_DE = { tier: 'tierlist', tier_comp: 'competitivo', clases: 'clases' };
+async function registrarGaleria(nombre, carpeta, url) {
+    const { error } = await sb.from('galeria').insert({ nombre: String(nombre || 'Imagen').slice(0, 80), carpeta, imagen_url: url });
+    return !error;
+}
+function limpiarNombre(n) {
+    const t = String(n).replace(/\.[^.]+$/, '').replace(/[_-]+/g, ' ').trim();
+    return (t.charAt(0).toUpperCase() + t.slice(1)).slice(0, 80) || 'Imagen';
+}
+function galItemHTML(g, modo) {
+    const accion = modo === 'picker' ? 'gal-elegir' : 'gal-marcar';
+    return `<div class="gal-item${modo === 'tab' && S.sel.has(g.id) ? ' sel' : ''}">
+        <button type="button" class="gal-img" data-a="${accion}" data-id="${g.id}" title="${esc(g.nombre)}"><img src="${esc(g.imagen_url)}" alt="" loading="lazy"></button>
+        <span class="gal-nom" title="${esc(g.nombre)}">${esc(g.nombre)}</span>
+        ${modo === 'tab' ? `<span class="gal-acc"><button type="button" class="gal-b" data-a="foto-renombrar" data-id="${g.id}" title="Renombrar">✎</button><button type="button" class="gal-b" data-a="foto-borrar" data-id="${g.id}" title="Eliminar">✕</button></span>` : ''}</div>`;
+}
+function ajustarMasiva() {
+    const destino = $('mDestino').value, lista = $('mLista').value;
+    mostrar($('mClase'), destino === 'tier_comp');
+    mostrar($('mSub'), destino === 'tier' && lista === 'arma');
+}
+function pintarGaleria() {
+    document.querySelectorAll('#filtrosGal .filtro-btn').forEach(b => b.classList.toggle('active', b.dataset.car === S.car));
+    const q = S.qg.trim().toLowerCase();
+    const lista = S.galeria.filter(g => (S.car === 'todas' || g.carpeta === S.car) && g.nombre.toLowerCase().includes(q));
+    $('galGrid').innerHTML = lista.map(g => galItemHTML(g, 'tab')).join('') || '<p class="vacio">No hay fotos en esta carpeta.</p>';
+    const n = [...S.sel].filter(id => S.galeria.some(g => g.id === id)).length;
+    mostrar($('galMasiva'), n > 0);
+    $('galSelTxt').textContent = n + ' foto(s) seleccionada(s): crea una ficha de tier list por cada una, de una sola vez. Después ajusta el tier de cada ficha en Contenido.';
+    ajustarMasiva();
+}
+async function subirGaleria(e) {
+    e.preventDefault();
+    const archivos = [...$('galFotos').files], carpeta = $('galCarpeta').value, btn = $('galGo');
+    if (!archivos.length) { toast('Elige una o varias fotos.'); return; }
+    btn.disabled = true;
+    let ok = 0, mal = 0; const filas = [];
+    for (const f of archivos) {
+        if (!fotoValida(f)) { mal++; continue; }
+        const ext = f.type === 'image/png' ? 'png' : f.type === 'image/webp' ? 'webp' : 'jpg', ruta = 'galeria/' + crypto.randomUUID() + '.' + ext;
+        const up = await sb.storage.from('objetos').upload(ruta, f, { contentType: f.type });
+        if (up.error) { mal++; continue; }
+        filas.push({ nombre: limpiarNombre(f.name), carpeta, imagen_url: sb.storage.from('objetos').getPublicUrl(ruta).data.publicUrl });
+    }
+    if (filas.length) { const { error } = await sb.from('galeria').insert(filas); if (error) mal += filas.length; else ok = filas.length; }
+    btn.disabled = false; $('formGal').reset();
+    toast(`${ok} foto(s) subida(s)` + (mal ? `; ${mal} no se pudieron subir (PNG, JPG o WEBP de hasta 2 MB).` : '.'));
+    await cargarTodo();
+}
+async function importarGaleria() {
+    const ya = new Set(S.galeria.map(g => g.imagen_url));
+    const candidatas = [...S.contenido.filter(c => c.imagen_url).map(c => ({ nombre: c.titulo, carpeta: CARPETA_DE[c.seccion] || 'otros', imagen_url: c.imagen_url })),
+        ...S.objetos.map(o => ({ nombre: o.nombre, carpeta: 'ranking', imagen_url: o.imagen_url }))]
+        .filter((x, i, arr) => !ya.has(x.imagen_url) && arr.findIndex(y => y.imagen_url === x.imagen_url) === i)
+        .map(x => ({ ...x, nombre: String(x.nombre).slice(0, 80) }));
+    if (!candidatas.length) { toast('No hay fotos nuevas para importar.'); return; }
+    const { error } = await sb.from('galeria').insert(candidatas);
+    if (error) { toast('No se pudo importar.'); return; }
+    toast(candidatas.length + ' foto(s) importada(s) a la galería.'); await cargarTodo();
+}
+async function borrarFoto(id) {
+    const g = S.galeria.find(x => x.id === id); if (!g) return;
+    const usos = S.contenido.filter(c => c.imagen_url === g.imagen_url).length + S.objetos.filter(o => o.imagen_url === g.imagen_url).length;
+    if (!confirm(`¿Eliminar "${g.nombre}" de la galería?` + (usos ? `\nLa usan ${usos} ficha(s) y dejarán de mostrarla.` : '') + '\nNo se puede deshacer.')) return;
+    const { data, error } = await sb.from('galeria').delete().eq('id', id).select();
+    if (error || !data.length) { toast('No se pudo eliminar la foto.'); return; }
+    const i = g.imagen_url.indexOf('/objetos/');
+    if (i >= 0) await sb.storage.from('objetos').remove([decodeURIComponent(g.imagen_url.slice(i + 9))]);
+    S.sel.delete(id); toast('Foto eliminada.'); await cargarTodo();
+}
+async function renombrarFoto(id) {
+    const g = S.galeria.find(x => x.id === id); if (!g) return;
+    const nuevo = (prompt('Nuevo nombre de la foto:', g.nombre) || '').trim().slice(0, 80);
+    if (!nuevo || nuevo === g.nombre) return;
+    const { data, error } = await sb.from('galeria').update({ nombre: nuevo }).eq('id', id).select();
+    if (error || !data.length) { toast('No se pudo renombrar.'); return; }
+    g.nombre = nuevo; pintarGaleria();
+}
+function abrirPicker(para) { S.picker = para; $('galQ').value = ''; pintarPicker(); $('galOverlay').classList.add('abierto'); }
+function pintarPicker() {
+    const q = $('galQ').value.trim().toLowerCase(), car = $('galCar').value;
+    $('galPicker').innerHTML = S.galeria.filter(g => (car === 'todas' || g.carpeta === car) && g.nombre.toLowerCase().includes(q))
+        .map(g => galItemHTML(g, 'picker')).join('') || '<p class="vacio">No hay fotos. Súbelas en la pestaña Galería.</p>';
+}
+function marcarElegida(destino, g) {
+    const el = $(destino === 'objeto' ? 'oElegida' : 'f_imagen_elegida'); if (!el) return;
+    el.innerHTML = g ? `<span class="elegida"><img src="${esc(g.imagen_url)}" alt=""> ${esc(g.nombre)} <button type="button" class="gal-b" data-a="quitar-elegida" data-id="${destino}" title="Quitar">✕</button></span>` : '';
+}
+function elegirFoto(id) {
+    const g = S.galeria.find(x => x.id === id); if (!g) return;
+    if (S.picker === 'objeto') S.elegidaObj = g; else S.elegida = g;
+    marcarElegida(S.picker, g); $('galOverlay').classList.remove('abierto');
+}
+async function crearMasivo() {
+    const gs = S.galeria.filter(g => S.sel.has(g.id));
+    if (!gs.length) { toast('Selecciona al menos una foto.'); return; }
+    const destino = $('mDestino').value, lista = $('mLista').value, clase = $('mClase').value;
+    if (destino === 'tier_comp' && !clase) { toast('Elige la clase.'); return; }
+    const base = S.contenido.filter(x => x.seccion === destino).reduce((m, x) => Math.max(m, x.orden), -1) + 1;
+    const filas = gs.map((g, i) => ({ seccion: destino, orden: base + i, titulo: g.nombre.length >= 2 ? g.nombre : g.nombre + ' 2', categoria: lista,
+        tier: $('mTier').value, subtier: '=', imagen_url: g.imagen_url, clase: destino === 'tier_comp' ? clase : null,
+        subtipo: destino === 'tier' && lista === 'arma' ? $('mSub').value : null, actualizado_en: new Date().toISOString() }));
+    const { data, error } = await sb.from('contenido').insert(filas).select();
+    if (error || !data.length) { console.error(error); toast('No se pudieron crear las fichas.'); return; }
+    S.sel.clear(); toast(data.length + ' ficha(s) creadas. Ajusta el tier de cada una en Contenido.'); await cargarTodo();
+}
+
+/* ---------- Renombrar jugadores del ranking ---------- */
+async function renombrarJugador(id) {
+    const j = S.jugadores.find(x => x.id === id); if (!j) return;
+    const nuevo = (prompt(`Nuevo nombre para "${j.nombre}":`, j.nombre) || '').trim();
+    if (!nuevo || nuevo === j.nombre) return;
+    if (nuevo.length < 2 || nuevo.length > 30) { toast('El nombre debe tener entre 2 y 30 caracteres.'); return; }
+    const { data, error } = await sb.from('jugadores').update({ nombre: nuevo }).eq('id', id).select();
+    if (error || !data.length) { toast(error && error.code === '23505' ? 'Ya existe un jugador con ese nombre.' : 'No se pudo cambiar el nombre.'); return; }
+    toast('Nombre cambiado. El ranking y el historial de duelos ya lo muestran.'); await cargarTodo();
+}
+
+function pintarTodo() { pintarStats(); pintarElo(); pintarDuelos(); poblarSelects(); pintarObjetos(); poblarCombo(); pintarListaCont(); pintarGaleria(); if (!$('camposCont').innerHTML) pintarFormCont(); pintarEnvios(); pintarReportes(); pintarUsuarios(); }
 
 /* ---------- Acciones (siempre se comprueba que la base de datos las aceptó) ---------- */
 async function actualizarEnvio(id, cambio) {
@@ -634,6 +818,12 @@ async function manejarAccion(a, id) {
         if (r && await actualizarEnvio(r.record_id, { hidden: true })) await quitarReporte(id);
     }
     else if (a === 'anular-duelo') return anularDuelo(id);
+    else if (a === 'renombrar-jug') return renombrarJugador(id);
+    else if (a === 'gal-marcar') { if (S.sel.has(id)) S.sel.delete(id); else S.sel.add(id); return pintarGaleria(); }
+    else if (a === 'foto-renombrar') return renombrarFoto(id);
+    else if (a === 'foto-borrar') return borrarFoto(id);
+    else if (a === 'elegir-galeria') return abrirPicker(id);
+    else if (a === 'quitar-elegida') { if (id === 'objeto') S.elegidaObj = null; else S.elegida = null; return marcarElegida(id, null); }
     else if (a === 'borrar-objeto') return borrarObjeto(id);
     else if (a === 'c-editar') return editarCont(id);
     else if (a === 'c-ocultar') return ocultarCont(id);
@@ -659,6 +849,17 @@ function bind() {
     $('formCombo').addEventListener('submit', guardarCombo);
     $('cJug').addEventListener('change', cargarComboJugador);
     $('formCont').addEventListener('submit', guardarCont);
+    $('formGal').addEventListener('submit', subirGaleria);
+    $('galImportar').addEventListener('click', importarGaleria);
+    $('qGal').addEventListener('input', e => { S.qg = e.target.value; pintarGaleria(); });
+    $('filtrosGal').addEventListener('click', e => { const b = e.target.closest('[data-car]'); if (b) { S.car = b.dataset.car; pintarGaleria(); } });
+    ['mDestino', 'mLista'].forEach(id => $(id).addEventListener('change', ajustarMasiva));
+    $('mCrear').addEventListener('click', crearMasivo);
+    $('mLimpiar').addEventListener('click', () => { S.sel.clear(); pintarGaleria(); });
+    $('galCerrar').addEventListener('click', () => $('galOverlay').classList.remove('abierto'));
+    $('galOverlay').addEventListener('click', e => { if (e.target === $('galOverlay')) $('galOverlay').classList.remove('abierto'); });
+    $('galQ').addEventListener('input', pintarPicker); $('galCar').addEventListener('change', pintarPicker);
+    $('galPicker').addEventListener('click', e => { const b = e.target.closest('[data-a="gal-elegir"]'); if (b) elegirFoto(b.dataset.id); });
     $('formTextos').addEventListener('submit', guardarTextos);
     $('cancelarCont').addEventListener('click', () => { S.cont.edit = null; pintarFormCont(); });
     $('formDuelo').addEventListener('submit', registrarDuelo);
@@ -668,7 +869,7 @@ function bind() {
         if (!t) return;
         if (t.id === 'btnRefrescar') return cargarTodo();
         if (t.dataset.tab) {
-            ['elo', 'duelos', 'combos', 'contenido', 'ranking', 'reportes', 'usuarios'].forEach(n => mostrar($('tab-' + n), n === t.dataset.tab));
+            ['elo', 'duelos', 'combos', 'contenido', 'galeria', 'ranking', 'reportes', 'usuarios'].forEach(n => mostrar($('tab-' + n), n === t.dataset.tab));
             return activar('tabs', 'tab', t.dataset.tab);
         }
         if (t.dataset.filtro) { S.filtro = t.dataset.filtro; activar('filtros', 'filtro', S.filtro); return pintarEnvios(); }
