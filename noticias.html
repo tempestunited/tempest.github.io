@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GUARIDA DRACONICA | Selector de Clanes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/56663d21c5.js" crossorigin="anonymous"></script>
+    <link rel="shortcut icon" href="imagenes/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+ 
+<!-- ══ MODAL LOGIN ════════════════════════════════════════ -->
+<div class="modal-overlay" id="modalOverlay">
+    <form class="modal-caja" id="modalForm" novalidate>
+        <button type="button" class="modal-cerrar" id="modalCerrar">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <h3 class="modal-titulo">Iniciar <span>Sesión</span></h3>
+        <div class="modal-campo">
+            <label for="loginUsuario">Usuario</label>
+            <input type="text" id="loginUsuario" placeholder="Pepito_Perez23" autocomplete="username">
+            <span class="modal-error" id="errorUsuario"></span>
+        </div>
+        <div class="modal-campo">
+            <label for="loginPassword">Contraseña</label>
+            <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password">
+            <span class="modal-error" id="errorPassword"></span>
+        </div>
+        <button type="submit" class="modal-submit">Entrar</button>
+        <p class="modal-pie">¿No tienes cuenta? <a href="registro.html">Regístrate aquí</a></p>
+    </form>
+</div>
+ 
+<!-- ══ NAVBAR ═════════════════════════════════════════════ -->
+<header class="navbar-gamer">
+    <a href="index.html" class="logo">GUARIDA <span>DRACONICA</span></a>
+    <button class="hamburger" id="hamburger"><i class="fa-solid fa-bars"></i></button>
+    <nav>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="noticias.html" class="active">Draconica Clan</a></li>
+            <li><a href="eventos.html">Eventos</a></li>
+            <li><a href="torneos.html">Torneos</a></li>
+            <li><a href="ranking.html">Ranking de duelos</a></li>
+            <li><a href="tierlist.html">Tier list</a></li>
+        </ul>
+    </nav>
+    <div class="nav-actions">
+        <button class="btn-gamer btn-login" id="btnEntrar">iniciar sesión</button>
+        <a href="registro.html" class="btn-gamer btn-register">Registrarse</a>
+    </div>
+</header>
+ 
+<!-- ══ PAGE HERO ══════════════════════════════════════════ -->
+<div class="page-hero">
+    <span class="seccion-eyebrow"><i class="fa-solid fa-newspaper"></i> NUESTROS CLANES DE LA ALIANZA DRACONICA</span>
+    <h2>DRACONICA <span>CLANES</span></h2>
+    <p> estos clanes buscan conquistar de igual forma el mágic rampage enfrentándose a los más fuertes y teniendo una determinacion inquebrantable si deseas ser parte puedes ver la lista de los disponibles</p> 
+</div>
+ 
+<!-- ══ NOTICIAS ═══════════════════════════════════════════ -->
+<section class="seccion">
+    <div class="grid-noticias">
+ 
+        <article class="card-noticia">
+            <div class="card-noticia__img img-gta">
+                <span class="card-badge">NUEVO</span>
+            </div>
+            <div class="card-noticia__body">
+                <span class="card-categoria">Tempest United</span>
+                <h3 class="card-titulo">CLAN KNK</h3>
+                <p class="card-texto">El clan knk de la comunidad se unio hace bastante tiempo en esta misma manteniendo una fuerte amistad con el lider</p>
+                <a class="card-link" href="#">unirse al clan <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </article>
+ 
+        <article class="card-noticia">
+            <div class="card-noticia__img img-gow">
+                <span class="card-badge card-badge--nuevo">DESTACADO</span>
+            </div>
+            <div class="card-noticia__body">
+                <span class="card-categoria">Tempest United</span>
+                <h3 class="card-titulo">TCMD-death to the clans</h3>
+                <p class="card-texto">un clan que de igual forma esta desde hace tiempo en la comunidad magic rampage no son lo que eran antes pero ahora buscan un mejor futuro para sus miembros</p>
+                <a class="card-link" href="#">unirse al clan <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </article>
+ 
+        <article class="card-noticia">
+            <div class="card-noticia__img img-xbox">
+            </div>
+            <div class="card-noticia__body">
+                <span class="card-categoria">Tempest United</span>
+                <h3 class="card-titulo">NOE-Nexus of Eclipse</h3>
+                <p class="card-texto">Un clan que actual sigue sobreviviendo gracias al apoyo de uno de sus lideres y que buscan tambien la gloria gracias al apoyo de sus miembros</p>
+                <a class="card-link" href="#">unirse al clan <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </article>
+ 
+        <article class="card-noticia">
+            <div class="card-noticia__img img-wolver">
+                <span class="card-badge card-badge--hot">🔥 HOT</span>
+            </div>
+            <div class="card-noticia__body">
+                <span class="card-categoria">Temnpest United</span>
+                <h3 class="card-titulo">Centinelas de la cripta</h3>
+                <p class="card-texto">un clan nuevo en la comunidad que busca miembros para poder destacarse mas en el juego ¿te nos unes querido rampager?</p>
+                <a class="card-link" href="#">unirse al clan <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </article>
+ 
+        <article class="card-noticia">
+            <div class="card-noticia__img img-re">
+            </div>
+            <div class="card-noticia__body">
+                <span class="card-categoria">Tempest united</span>
+                <h3 class="card-titulo">Clan SRK</h3>
+                <p class="card-texto">de igual forma intentan destacarse en el juego en el modo duelos ademas de ayudar a principiantes</p>
+                <a class="card-link" href="#">unirse al clan <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </article>
+ 
+        <article class="card-noticia">
+            <div class="card-noticia__img img-SC-SHADOW">
+            </div>
+            <div class="card-noticia__body">
+                <span class="card-categoria">Tempest United</span>
+                <h3 class="card-titulo">SC-Shadow Crimson</h3>
+                <p class="card-texto">el primer clan en el cual la comunidad tempest dio su primeros pasos para llegar hasta este momento junto con la comunidad</p>
+                <a class="card-link" href="#">unirse al clan <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </article>
+
+        <article class="card-noticia">
+            <div class="card-noticia__img img-SNX-CLAN">
+            </div>
+            <div class="card-noticia__body">
+                <span class="card-categoria">Tempest United</span>
+                <h3 class="card-titulo">CLAN-SNX</h3>
+                <p class="card-texto">un clan creado por uno de los miembros del grandioso KNK para poder seguir expandiendose dentro del juego ¿gustas apoyarlos tambien uniendote a sus fuerzas?</p>
+                <a class="card-link" href="#">unirse al clan <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </article>
+
+        <article class="card-noticia">
+            <div class="card-noticia__img img-GOLD-NATIONAL">
+            </div>
+            <div class="card-noticia__body">
+                <span class="card-categoria">Tempest United</span>
+                <h3 class="card-titulo">Classy Gold National</h3>
+                <p class="card-texto">jugadores que juegan de la manera mas sotisficada y fina manteniendose como jugadores que como dice buscan pertenecer o crear una era dorada</p>
+                <a class="card-link" href="#">unirse al clan <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </article>
+        <article class="card-noticia">
+            <div class="card-noticia__img img-CSR-CSR">
+            </div>
+            <div class="card-noticia__body">
+                <span class="card-categoria">Tempest United</span>
+                <h3 class="card-titulo">Cara sucia rampager (CSR)</h3>
+                <p class="card-texto">pertenecientes a una era dorada del juego los mas fieles se quedaron en el clan, actualmente buscan revivir y necesitan nuevos miembros que esten dispuestos a dar ese apoyo ¿interesado?</p>
+                <a class="card-link" href="#">unirse al clan <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </article>
+        <article class="card-noticia">
+            <div class="card-noticia__img img-BRS-CLAN">
+            </div>
+            <div class="card-noticia__body">
+                <span class="card-categoria">Tempest United</span>
+                <h3 class="card-titulo">Bane Red Shadow (BRS)</h3>
+                <p class="card-texto">nacidos en las sombras,forjados en la batalla.no buscamos reconocimiento buscamos dominio. cuando la oscuridad cae,nuestra sombra es lo ultimo que veras</p>
+                <a class="card-link" href="#">unirse al clan <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </article>
+        <article class="card-noticia">
+            <div class="card-noticia__img img-jrrk-p">
+            </div>
+            <div class="card-noticia__body">
+                <span class="card-categoria">Tempest United</span>
+                <h3 class="card-titulo">(JRRK) Patrulla roja</h3>
+                <p class="card-texto">una unidad forjada para la batalla. disciplina,estrategia y lealtad son nuestros pilares. No retrocedemos ante ningun desafio</p>
+                <a class="card-link" href="#">unirse al clan <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </article>
+        <article class="card-noticia">
+            <div class="card-noticia__img img-LS-P">
+            </div>
+            <div class="card-noticia__body">
+                <span class="card-categoria">Tempest United</span>
+                <h3 class="card-titulo">(LS) Lunar Shadows</h3>
+                <p class="card-texto">Desde el silencio de la noche emergemos como sombras bajo la luna. somos un clan unido por la lealtad,la estrategia y determinacion. no necesitamos estar en la luz para demostrar nuestro poder</p>
+                <a class="card-link" href="#">unirse al clan <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </article>
+        <article class="card-noticia">
+            <div class="card-noticia__img img-RMA-A">
+            </div>
+            <div class="card-noticia__body">
+                <span class="card-categoria">Tempest United</span>
+                <h3 class="card-titulo">(RMA) </h3>
+                <p class="card-texto">Cada miembro lleva consigo una parte de ese legado,buscando mantenerlo vivo y llevarlo cada vez mas lejos</p>
+                <a class="card-link" href="#">unirse al clan <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </article>
+        <article class="card-noticia">
+            <div class="card-noticia__img img-LGML-L">
+            </div>
+            <div class="card-noticia__body">
+                <span class="card-categoria">Tempest United</span>
+                <h3 class="card-titulo">(LGML) </h3>
+                <p class="card-texto">aqui los grandes maestros tambien fueron simples novatos e individuos que ahora con su experiencia buscan enseñar ya que en esos novatos se ven a ellos mismos</p>
+                <a class="card-link" href="#">unirse al clan <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </article>
+        
+
+
+
+
+
+
+
+
+ 
+    </div>
+</section>
+ 
+<!-- ══ FOOTER ════════════════════════════════════════════ -->
+<footer class="footer">
+    <div class="footer-grid">
+        <div>
+            <p class="footer-logo">ZONA <span>GAMER</span></p>
+            <p class="footer-slogan">Tu portal de noticias, torneos y eventos gamer.</p>
+            <div class="footer-redes">
+                <a href="https://www.facebook.com/share/g/1F5JUXiEAT/" class="footer-red"><i class="fa-brands fa-facebook"></i></a>
+                <a href="https://discord.gg/a877AMgH6" class="footer-red"><i class="fa-brands fa-discord"></i></a>
+                <a href="https://www.facebook.com/share/g/1JA7L7tTZp/" class="footer-red"><i class="fa-brands fa-facebook"></i></a>
+                <a href="https://chat.whatsapp.com/E2L1P5HkYa9Aog9ZKnJuWw?s=cl&p=a&iam=2" class="footer-red"><i class="fa-brands fa-whatsapp"></i></a>
+            </div>
+        </div>
+        <div class="footer-col">
+            <h4>Secciones</h4>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="noticias.html">Draconica Clanes</a></li>
+                <li><a href="eventos.html">Eventos</a></li>
+                <li><a href="torneos.html">Torneos</a></li>
+                <li><a href="ranking.html">Ranking de Duelos</a></li>
+            <li><a href="tierlist.html">Tier list</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Cuenta</h4>
+            <ul>
+                <li><a href="registro.html">Registrarse</a></li>
+                <li><a href="login.html">Iniciar Sesión</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>© 2026 GUARIDA DRACONICA — Todos los derechos reservados</p>
+    </div>
+</footer>
+ 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="auth.js"></script>
+<script src="contenido.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GUARIDA DRACONICA | Eventos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/56663d21c5.js" crossorigin="anonymous"></script>
+    <link rel="shortcut icon" href="imagenes/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+ 
+<!-- ══ MODAL LOGIN ════════════════════════════════════════ -->
+<div class="modal-overlay" id="modalOverlay">
+    <form class="modal-caja" id="modalForm" novalidate>
+        <button type="button" class="modal-cerrar" id="modalCerrar">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <h3 class="modal-titulo">Iniciar <span>Sesión</span></h3>
+        <div class="modal-campo">
+            <label for="loginUsuario">Usuario</label>
+            <input type="text" id="loginUsuario" placeholder="Pepito_Perez23" autocomplete="username">
+            <span class="modal-error" id="errorUsuario"></span>
+        </div>
+        <div class="modal-campo">
+            <label for="loginPassword">Contraseña</label>
+            <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password">
+            <span class="modal-error" id="errorPassword"></span>
+        </div>
+        <button type="submit" class="modal-submit">Entrar</button>
+        <p class="modal-pie">¿No tienes cuenta? <a href="registro.html">Regístrate aquí</a></p>
+    </form>
+</div>
+ 
+<!-- ══ NAVBAR ═════════════════════════════════════════════ -->
+<header class="navbar-gamer">
+    <a href="index.html" class="logo">GUARIDA <span>DRACONICA</span></a>
+    <button class="hamburger" id="hamburger"><i class="fa-solid fa-bars"></i></button>
+    <nav>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="noticias.html">Draconica Clan</a></li>
+            <li><a href="eventos.html" class="active">Eventos</a></li>
+            <li><a href="torneos.html">Torneos</a></li>
+            <li><a href="ranking.html">Ranking de duelos</a></li>
+            <li><a href="tierlist.html">Tier list</a></li>
+        </ul>
+    </nav>
+    <div class="nav-actions">
+        <button class="btn-gamer btn-login" id="btnEntrar">iniciar sesión</button>
+        <a href="registro.html" class="btn-gamer btn-register">Registrarse</a>
+    </div>
+</header>
+ 
+<!-- ══ PAGE HERO ══════════════════════════════════════════ -->
+<div class="page-hero">
+    <span class="seccion-eyebrow"><i class="fa-solid fa-calendar-days"></i> AGENDA GAMER</span>
+    <h2>Eventos <span>2026</span></h2>
+    <p>Conferencias, lanzamientos y showcases oficiales. Todos los horarios en BOT (Bolivia).</p>
+</div>
+ 
+<!-- ══ FILTROS ════════════════════════════════════════════ -->
+<div class="filtros">
+    <button class="filtro-btn active" data-filtro="todos">Todos</button>
+    <button class="filtro-btn" data-filtro="showcase">Showcases</button>
+    <button class="filtro-btn" data-filtro="expo">Expos</button>
+    <button class="filtro-btn" data-filtro="lanzamiento">Lanzamientos</button>
+    <button class="filtro-btn" data-filtro="esports">eSports</button>
+</div>
+ 
+<!-- ══ TIMELINE ═══════════════════════════════════════════ -->
+<div class="timeline-contenedor">
+ 
+    <!-- JUNIO 2026 -->
+    <div class="timeline-mes">
+        <p class="timeline-mes__label">JUNIO 2026</p>
+ 
+        <article class="evento-card" data-tipo="showcase">
+            <div class="evento-fecha">
+                <span class="evento-dia">08</span>
+                <span class="evento-mes">JUN</span>
+            </div>
+            <div class="evento-body">
+                <div class="evento-header">
+                    <span class="evento-tag tag-showcase">Showcase</span>
+                    <span class="evento-horario"><i class="fa-regular fa-clock"></i> 18:00 BOT</span>
+                </div>
+                <h3 class="evento-titulo">Xbox Games Showcase 2026</h3>
+                <p class="evento-desc">Microsoft revela su lineup completo: Gears E-Day, Clockwork Revolution, Halo y novedades de Game Pass.</p>
+                <div class="evento-footer">
+                    <span class="evento-plataforma"><i class="fa-brands fa-youtube"></i> YouTube / Twitch</span>
+                    <span class="estado-proximo">Próximo</span>
+                </div>
+            </div>
+        </article>
+ 
+        <article class="evento-card" data-tipo="showcase">
+            <div class="evento-fecha">
+                <span class="evento-dia">13</span>
+                <span class="evento-mes">JUN</span>
+            </div>
+            <div class="evento-body">
+                <div class="evento-header">
+                    <span class="evento-tag tag-showcase">Showcase</span>
+                    <span class="evento-horario"><i class="fa-regular fa-clock"></i> 22:00 BOT</span>
+                </div>
+                <h3 class="evento-titulo">Summer Game Fest 2026</h3>
+                <p class="evento-desc">Geoff Keighley presenta lo mejor del año con anuncios mundiales en vivo desde Los Ángeles.</p>
+                <div class="evento-footer">
+                    <span class="evento-plataforma"><i class="fa-brands fa-twitch"></i> Twitch / Steam</span>
+                    <span class="estado-proximo">Próximo</span>
+                </div>
+            </div>
+        </article>
+ 
+    </div>
+ 
+    <!-- JULIO 2026 -->
+    <div class="timeline-mes">
+        <p class="timeline-mes__label">JULIO 2026</p>
+ 
+        <article class="evento-card" data-tipo="esports">
+            <div class="evento-fecha">
+                <span class="evento-dia">08</span>
+                <span class="evento-mes">JUL</span>
+            </div>
+            <div class="evento-body">
+                <div class="evento-header">
+                    <span class="evento-tag tag-esports">eSports</span>
+                    <span class="evento-horario"><i class="fa-regular fa-clock"></i> 16:00 BOT</span>
+                </div>
+                <h3 class="evento-titulo">The International 2026 — Dota 2</h3>
+                <p class="evento-desc">El torneo más grande de Dota 2 con un prize pool estimado de $25M. Los mejores equipos del mundo compiten por el Aegis.</p>
+                <div class="evento-footer">
+                    <span class="evento-plataforma"><i class="fa-brands fa-twitch"></i> Twitch / Steam.tv</span>
+                    <span class="estado-proximo">Próximo</span>
+                </div>
+            </div>
+        </article>
+ 
+        <article class="evento-card" data-tipo="lanzamiento">
+            <div class="evento-fecha">
+                <span class="evento-dia">18</span>
+                <span class="evento-mes">JUL</span>
+            </div>
+            <div class="evento-body">
+                <div class="evento-header">
+                    <span class="evento-tag tag-lanzamiento">Lanzamiento</span>
+                    <span class="evento-horario"><i class="fa-regular fa-clock"></i> 00:00 BOT</span>
+                </div>
+                <h3 class="evento-titulo">Assassin's Creed — Lanzamiento global</h3>
+                <p class="evento-desc">La nueva entrega de la saga llega a PS5, Xbox Series X y PC con un mundo abierto ambientado en el Japón feudal.</p>
+                <div class="evento-footer">
+                    <span class="evento-plataforma"><i class="fa-solid fa-gamepad"></i> PS5 / Xbox / PC</span>
+                    <span class="estado-esperado">Esperado</span>
+                </div>
+            </div>
+        </article>
+ 
+    </div>
+ 
+    <!-- AGOSTO 2026 -->
+    <div class="timeline-mes">
+        <p class="timeline-mes__label">AGOSTO 2026</p>
+ 
+        <article class="evento-card" data-tipo="expo">
+            <div class="evento-fecha">
+                <span class="evento-dia">20</span>
+                <span class="evento-mes">AGO</span>
+            </div>
+            <div class="evento-body">
+                <div class="evento-header">
+                    <span class="evento-tag tag-expo">Expo</span>
+                    <span class="evento-horario"><i class="fa-solid fa-location-dot"></i> Colonia, Alemania</span>
+                </div>
+                <h3 class="evento-titulo">Gamescom 2026</h3>
+                <p class="evento-desc">La feria de videojuegos más grande del mundo abre sus puertas. Demos jugables, anuncios sorpresa y el Opening Night Live.</p>
+                <div class="evento-footer">
+                    <span class="evento-plataforma"><i class="fa-solid fa-ticket"></i> Presencial + Stream</span>
+                    <span class="estado-proximo">Próximo</span>
+                </div>
+            </div>
+        </article>
+ 
+    </div>
+ 
+    <!-- SEPTIEMBRE 2026 -->
+    <div class="timeline-mes">
+        <p class="timeline-mes__label">SEPTIEMBRE 2026</p>
+ 
+        <article class="evento-card evento-card--destacado" data-tipo="lanzamiento">
+            <div class="evento-fecha">
+                <span class="evento-dia">15</span>
+                <span class="evento-mes">SEP</span>
+            </div>
+            <div class="evento-body">
+                <div class="evento-header">
+                    <span class="evento-tag tag-lanzamiento">Lanzamiento</span>
+                    <span class="evento-horario"><i class="fa-regular fa-clock"></i> 00:00 BOT</span>
+                </div>
+                <h3 class="evento-titulo">Marvel's Wolverine — Día de lanzamiento</h3>
+                <p class="evento-desc">Insomniac Games lanza el título más esperado del año. Acción brutal exclusiva de PS5 en el universo Marvel.</p>
+                <div class="evento-footer">
+                    <span class="evento-plataforma"><i class="fa-solid fa-gamepad"></i> PS5 Exclusivo</span>
+                    <span class="estado-esperado">🔥 Muy esperado</span>
+                </div>
+            </div>
+        </article>
+ 
+        <article class="evento-card evento-card--destacado" data-tipo="lanzamiento">
+            <div class="evento-fecha">
+                <span class="evento-dia">26</span>
+                <span class="evento-mes">SEP</span>
+            </div>
+            <div class="evento-body">
+                <div class="evento-header">
+                    <span class="evento-tag tag-lanzamiento">Lanzamiento</span>
+                    <span class="evento-horario"><i class="fa-regular fa-clock"></i> 00:00 BOT</span>
+                </div>
+                <h3 class="evento-titulo">GTA 6 — Lanzamiento mundial</h3>
+                <p class="evento-desc">El juego más anticipado de la historia llega a PS5 y Xbox Series X. Rockstar Games y la ciudad de Leonida.</p>
+                <div class="evento-footer">
+                    <span class="evento-plataforma"><i class="fa-solid fa-gamepad"></i> PS5 / Xbox Series X</span>
+                    <span class="estado-hype">⚡ MEGA HYPE</span>
+                </div>
+            </div>
+        </article>
+ 
+    </div>
+ 
+    <!-- DICIEMBRE 2026 -->
+    <div class="timeline-mes">
+        <p class="timeline-mes__label">DICIEMBRE 2026</p>
+ 
+        <article class="evento-card" data-tipo="esports">
+            <div class="evento-fecha">
+                <span class="evento-dia">11</span>
+                <span class="evento-mes">DIC</span>
+            </div>
+            <div class="evento-body">
+                <div class="evento-header">
+                    <span class="evento-tag tag-esports">eSports</span>
+                    <span class="evento-horario"><i class="fa-regular fa-clock"></i> 20:00 BOT</span>
+                </div>
+                <h3 class="evento-titulo">The Game Awards 2026</h3>
+                <p class="evento-desc">La noche más grande de los videojuegos. GOTY, anuncios mundiales y actuaciones en vivo desde Los Ángeles.</p>
+                <div class="evento-footer">
+                    <span class="evento-plataforma"><i class="fa-brands fa-youtube"></i> YouTube / Twitch</span>
+                    <span class="estado-proximo">Próximo</span>
+                </div>
+            </div>
+        </article>
+ 
+        <article class="evento-card" data-tipo="lanzamiento">
+            <div class="evento-fecha">
+                <span class="evento-dia">20</span>
+                <span class="evento-mes">DIC</span>
+            </div>
+            <div class="evento-body">
+                <div class="evento-header">
+                    <span class="evento-tag tag-lanzamiento">Lanzamiento</span>
+                    <span class="evento-horario"><i class="fa-regular fa-clock"></i> 00:00 BOT</span>
+                </div>
+                <h3 class="evento-titulo">EA Sports UFC 6 — Lanzamiento</h3>
+                <p class="evento-desc">La nueva entrega de la saga de artes marciales mixtas con el motor gráfico más avanzado de la franquicia.</p>
+                <div class="evento-footer">
+                    <span class="evento-plataforma"><i class="fa-solid fa-gamepad"></i> PS5 / Xbox Series X</span>
+                    <span class="estado-proximo">Próximo</span>
+                </div>
+            </div>
+        </article>
+ 
+    </div>
+ 
+</div><!-- /timeline-contenedor -->
+ 
+<!-- ══ FOOTER ════════════════════════════════════════════ -->
+<footer class="footer">
+    <div class="footer-grid">
+        <div>
+            <p class="footer-logo">ZONA <span>GAMER</span></p>
+            <p class="footer-slogan">Tu portal de noticias, torneos y eventos gamer.</p>
+            <div class="footer-redes">
+               <a href="https://www.facebook.com/share/g/1F5JUXiEAT/" class="footer-red"><i class="fa-brands fa-facebook"></i></a>
+                <a href="https://discord.gg/a877AMgH6" class="footer-red"><i class="fa-brands fa-discord"></i></a>
+                <a href="https://www.facebook.com/share/g/1JA7L7tTZp/" class="footer-red"><i class="fa-brands fa-facebook"></i></a>
+                <a href="https://chat.whatsapp.com/E2L1P5HkYa9Aog9ZKnJuWw?s=cl&p=a&iam=2" class="footer-red"><i class="fa-brands fa-whatsapp"></i></a>
+            </div>
+        </div>
+        <div class="footer-col">
+            <h4>Secciones</h4>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="noticias.html">Noticias</a></li>
+                <li><a href="eventos.html">Eventos</a></li>
+                <li><a href="torneos.html">Torneos</a></li>
+                <li><a href="ranking.html">Ranking de Duelos</a></li>
+            <li><a href="tierlist.html">Tier list</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Cuenta</h4>
+            <ul>
+                <li><a href="registro.html">Registrarse</a></li>
+                <li><a href="login.html">Iniciar Sesión</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>© 2026 GUARIDA DRACONICA — Todos los derechos reservados</p>
+    </div>
+</footer>
+ 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="auth.js"></script>
+<script src="contenido.js"></script>
+<script src="script.js"></script>
+<script>
+// Filtros de eventos
+document.querySelectorAll(".filtro-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+        document.querySelectorAll(".filtro-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        const filtro = btn.dataset.filtro;
+        document.querySelectorAll(".evento-card").forEach(card => {
+            if (filtro === "todos" || card.dataset.tipo === filtro) {
+                card.style.display = "flex";
+            } else {
+                card.style.display = "none";
+            }
+        });
+        // Ocultar meses vacíos
+        document.querySelectorAll(".timeline-mes").forEach(mes => {
+            const visibles = mes.querySelectorAll(".evento-card:not([style*='none'])");
+            mes.style.display = visibles.length === 0 ? "none" : "block";
+        });
+    });
+});
+</script>
+</body>
+</html>
