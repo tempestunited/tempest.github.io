@@ -329,6 +329,19 @@ html.fondo-personal .ticker, html.fondo-personal .footer { background: rgba(3,0,
         if (!blob || blob.type !== 'image/webp') blob = await new Promise(r => c.toBlob(r, 'image/jpeg', 0.85));
         return blob;
     }
+    /* Traduce el error real a un mensaje que diga qué falta. */
+    function msgFoto(err) {
+        const m = String((err && (err.message || err.error_description)) || err || '').toLowerCase();
+        if (m.includes('bucket not found')) return 'No existe la carpeta "avatares" en Supabase. Ejecuta supabase-personalizar.sql.';
+        if (m.includes('row-level security') || m.includes('violates row') || m.includes('not authorized') || m.includes('permission denied') || m.includes('unauthorized'))
+            return 'Supabase rechazó el permiso. Ejecuta supabase-personalizar.sql y vuelve a iniciar sesión.';
+        if (m.includes('avatar_url') && (m.includes('column') || m.includes('schema cache'))) return 'Falta la columna del avatar. Ejecuta supabase-personalizar.sql.';
+        if (m.includes('sin permiso')) return 'No se encontró tu perfil para guardar la foto. Cierra sesión, vuelve a entrar y prueba de nuevo.';
+        if (m.includes('mime') || m.includes('not supported') || m.includes('invalid_mime')) return 'Ese formato de imagen no está permitido.';
+        if (m.includes('failed to fetch')) return 'No se pudo conectar con Supabase.';
+        if (m.includes('decode') || m.includes('source image') || m.includes('could not be')) return 'No se pudo leer esa imagen. Prueba con una PNG o JPG.';
+        return 'No se pudo guardar la foto: ' + ((err && err.message) || 'error desconocido');
+    }
     async function guardarFoto() {
         const f = $('fpArchivoFoto') && $('fpArchivoFoto').files[0], u = await usuario();
         if (!u) { aviso('Inicia sesión primero.'); return; }
@@ -343,7 +356,7 @@ html.fondo-personal .ticker, html.fondo-personal .footer { background: rgba(3,0,
             if (r.error || !r.data.length) throw r.error || new Error('sin permiso');
             aviso('Foto de perfil actualizada.');
             cargarAvatarPerfil(); pintarFoto();
-        } catch (err) { console.error(err); aviso('No se pudo guardar la foto.'); }
+        } catch (err) { console.error('Foto de perfil:', err); aviso(msgFoto(err)); }
     }
     async function quitarFoto() {
         const u = await usuario(); if (!u) return;
