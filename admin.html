@@ -96,6 +96,7 @@
         <button class="filtro-btn" data-tab="ranking"><i class="fa-solid fa-trophy"></i> Rachas</button>
         <button class="filtro-btn" data-tab="reportes"><i class="fa-solid fa-flag"></i> Reportes</button>
         <button class="filtro-btn" data-tab="usuarios"><i class="fa-solid fa-users"></i> Usuarios y admins</button>
+        <button class="filtro-btn" data-tab="rangos"><i class="fa-solid fa-medal"></i> Rangos</button>
     </div>
 
     <section id="tab-elo">
@@ -221,6 +222,11 @@
 
     <section id="tab-reportes" style="display:none"><div id="listaReportes"></div></section>
 
+    <section id="tab-rangos" style="display:none">
+        <p class="vacio" style="text-align:left;padding:0 0 14px">Rangos de la comunidad (no tienen relación con el ranking Elo). Aquí cambias la <b>insignia principal</b> y el nombre de cada rango. Para dar un rango a un usuario, ve a <b>Usuarios y admins</b>.</p>
+        <div id="listaRangos"></div>
+    </section>
+
     <section id="tab-usuarios" style="display:none">
         <div class="barra"><input id="qUsuarios" type="search" placeholder="Buscar usuario" aria-label="Buscar usuario"></div>
         <div id="listaUsuarios"></div>
@@ -257,7 +263,7 @@
 const sb = window.sb;
 const $ = id => document.getElementById(id);
 const toast = m => window.Toast(m);
-const S = { user: null, rol: null, envios: [], reportes: [], perfiles: [], admins: [], jugadores: [], duelos: [], objetos: [], contenido: [], textos: [], galeria: [], car: 'todas', qg: '', sel: new Set(), elegida: null, elegidaObj: null, picker: null, cont: { sec: 'noticias', edit: null }, qj: '', filtro: 'pendientes', q: '', qu: '' };
+const S = { user: null, rol: null, envios: [], reportes: [], perfiles: [], admins: [], jugadores: [], duelos: [], objetos: [], contenido: [], textos: [], galeria: [], rangos: [], car: 'todas', qg: '', sel: new Set(), elegida: null, elegidaObj: null, picker: null, cont: { sec: 'noticias', edit: null }, qj: '', filtro: 'pendientes', q: '', qu: '' };
 
 /* ---------- Utilidades ---------- */
 function esc(s) { return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
@@ -294,20 +300,21 @@ async function salir() { await sb.auth.signOut(); }
 
 /* ---------- Carga de datos ---------- */
 async function cargarTodo() {
-    const [e, r, p, a, jg, du, ob, ct, tx, ga] = await Promise.all([
+    const [e, r, p, a, jg, du, ob, ct, tx, ga, rg] = await Promise.all([
         sb.from('submissions').select('*').order('created_at', { ascending: false }).limit(500),
         sb.from('reports').select('id, reason, created_at, record_id, submissions(username, streak, evidence_url, hidden)').order('created_at', { ascending: false }),
-        sb.from('perfiles').select('id, usuario, creado_en').order('creado_en', { ascending: false }),
+        sb.from('perfiles').select('id, usuario, creado_en, rango').order('creado_en', { ascending: false }),
         sb.from('admins').select('user_id, rol'),
         sb.from('jugadores').select('*').order('elo', { ascending: false }),
         sb.from('duelos').select('*').order('jugado_en', { ascending: false }).limit(200),
         sb.from('objetos').select('*').order('nombre'),
         sb.from('contenido').select('*').order('orden'),
         sb.from('textos').select('*'),
-        sb.from('galeria').select('*').order('creado_en', { ascending: false }).limit(1000)
+        sb.from('galeria').select('*').order('creado_en', { ascending: false }).limit(1000),
+        sb.from('rangos').select('*').order('orden')
     ]);
-    if (e.error || r.error || p.error || a.error || jg.error || du.error || ob.error || ct.error || tx.error || ga.error) toast('Algunos datos no cargaron. ¿Ejecutaste supabase-admin.sql y supabase-elo.sql?');
-    S.envios = e.data || []; S.reportes = r.data || []; S.perfiles = p.data || []; S.admins = a.data || []; S.jugadores = jg.data || []; S.duelos = du.data || []; S.objetos = ob.data || []; S.contenido = ct.data || []; S.textos = tx.data || []; S.galeria = ga.data || [];
+    if (e.error || r.error || p.error || a.error || jg.error || du.error || ob.error || ct.error || tx.error || ga.error || rg.error) toast('Algunos datos no cargaron. ¿Ejecutaste supabase-admin.sql y supabase-elo.sql?');
+    S.envios = e.data || []; S.reportes = r.data || []; S.perfiles = p.data || []; S.admins = a.data || []; S.jugadores = jg.data || []; S.duelos = du.data || []; S.objetos = ob.data || []; S.contenido = ct.data || []; S.textos = tx.data || []; S.galeria = ga.data || []; S.rangos = rg.data || [];
     pintarTodo();
 }
 
@@ -353,7 +360,7 @@ function pintarUsuarios() {
         const tag = rol ? `<span class="tag ok">${rol === 'dueno' ? 'Dueño' : 'Admin'}</span>` : '';
         const boton = S.rol === 'dueno' && rol !== 'dueno'
             ? `<button class="btn-gamer ${rol ? '' : 'btn-ok'}" data-a="${rol ? 'quitar-admin' : 'hacer-admin'}" data-id="${p.id}">${rol ? 'Quitar admin' : 'Hacer admin'}</button>` : '';
-        return `<div class="fila sin-img"><div><h4>${esc(p.usuario)}${tag}</h4><small>Cuenta creada: ${fecha(p.creado_en)}</small></div><div class="acc">${boton}</div></div>`;
+        return `<div class="fila sin-img"><div><h4>${esc(insigniaDe(p))} ${esc(p.usuario)}${tag}</h4><small>Cuenta creada: ${fecha(p.creado_en)}</small></div><div class="acc">${selectorRango(p)}${boton}</div></div>`;
     }).join('');
     $('listaUsuarios').innerHTML = html || '<p class="vacio">No hay cuentas que coincidan.</p>';
 }
@@ -776,7 +783,43 @@ async function renombrarJugador(id) {
     toast('Nombre cambiado. El ranking y el historial de duelos ya lo muestran.'); await cargarTodo();
 }
 
-function pintarTodo() { pintarStats(); pintarElo(); pintarDuelos(); poblarSelects(); pintarObjetos(); poblarCombo(); pintarListaCont(); pintarGaleria(); if (!$('camposCont').innerHTML) pintarFormCont(); pintarEnvios(); pintarReportes(); pintarUsuarios(); }
+/* ---------- Rangos de la comunidad ---------- */
+const ROMANOS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
+const EMOJIS = ['🩸', '🌙', '🌟', '🍀', '⚔️', '🫀', '🔥', '💀', '👑', '🛡️', '🐉', '⚡', '🗡️', '🏹', '💎', '🦅'];
+function rangoDe(p) { return S.rangos.find(r => r.orden === (p.rango || 1)); }
+function insigniaDe(p) { const r = rangoDe(p); return r ? r.insignia : ''; }
+function selectorRango(p) {
+    if (!S.rangos.length) return '';
+    return `<select data-rango-de="${p.id}" aria-label="Rango de ${esc(p.usuario)}" style="background:#12002a;border:1.5px solid #330055;border-radius:8px;padding:6px 10px;color:#fff;font:12px 'Montserrat',sans-serif">`
+        + S.rangos.map(r => `<option value="${r.orden}"${r.orden === (p.rango || 1) ? ' selected' : ''}>${esc(r.insignia)} ${ROMANOS[r.orden - 1] || r.orden}. ${esc(r.nombre)}</option>`).join('') + '</select>';
+}
+async function asignarRango(id, orden) {
+    const { error } = await sb.rpc('asignar_rango', { p_usuario: id, p_rango: orden });
+    if (error) { console.error(error); toast('No se pudo cambiar el rango.'); return cargarTodo(); }
+    const p = S.perfiles.find(x => x.id === id); if (p) p.rango = orden;
+    toast('Rango actualizado.'); pintarUsuarios(); pintarRangos();
+}
+function pintarRangos() {
+    const n = o => S.perfiles.filter(p => (p.rango || 1) === o).length;
+    $('listaRangos').innerHTML = S.rangos.map(r => `<div class="fila sin-img" style="grid-template-columns:1fr"><div>
+        <h4><span style="font-size:22px">${esc(r.insignia)}</span> ${ROMANOS[r.orden - 1] || r.orden}. ${esc(r.nombre)} <span class="tag cl">${n(r.orden)} usuario(s)</span></h4>
+        <div class="barra" style="margin:10px 0 6px">
+            <input id="rgIns${r.orden}" value="${esc(r.insignia)}" maxlength="8" style="flex:0 0 90px;text-align:center;font-size:20px" aria-label="Insignia principal">
+            <input id="rgNom${r.orden}" value="${esc(r.nombre)}" maxlength="40" aria-label="Nombre del rango">
+            <button class="btn-gamer" data-a="rango-guardar" data-id="${r.orden}">Guardar</button></div>
+        <div class="acc" style="justify-content:flex-start">${EMOJIS.map(e => `<button type="button" class="gal-b" style="width:30px;height:30px;font-size:16px" data-a="emoji" data-id="${r.orden}|${e}" aria-label="Usar ${e}">${e}</button>`).join('')}</div>
+        </div></div>`).join('') || '<p class="vacio">No hay rangos todavía. Ejecuta supabase-rangos.sql en Supabase.</p>';
+}
+async function guardarRango(orden) {
+    const ins = $('rgIns' + orden).value.trim(), nom = $('rgNom' + orden).value.trim();
+    if (!ins || [...ins].length > 8) { toast('La insignia debe tener entre 1 y 8 caracteres (por ejemplo, un emoji).'); return; }
+    if (nom.length < 2 || nom.length > 40) { toast('El nombre debe tener entre 2 y 40 caracteres.'); return; }
+    const { data, error } = await sb.from('rangos').update({ insignia: ins, nombre: nom }).eq('orden', orden).select();
+    if (error || !data.length) { toast('No se pudo guardar el rango.'); return; }
+    toast('Rango actualizado. Ya se ve en la página.'); await cargarTodo();
+}
+
+function pintarTodo() { pintarStats(); pintarElo(); pintarDuelos(); poblarSelects(); pintarObjetos(); poblarCombo(); pintarListaCont(); pintarGaleria(); pintarRangos(); if (!$('camposCont').innerHTML) pintarFormCont(); pintarEnvios(); pintarReportes(); pintarUsuarios(); }
 
 /* ---------- Acciones (siempre se comprueba que la base de datos las aceptó) ---------- */
 async function actualizarEnvio(id, cambio) {
@@ -819,6 +862,8 @@ async function manejarAccion(a, id) {
     }
     else if (a === 'anular-duelo') return anularDuelo(id);
     else if (a === 'renombrar-jug') return renombrarJugador(id);
+    else if (a === 'rango-guardar') return guardarRango(+id);
+    else if (a === 'emoji') { const [o, em] = id.split('|'); $('rgIns' + o).value = em; return; }
     else if (a === 'gal-marcar') { if (S.sel.has(id)) S.sel.delete(id); else S.sel.add(id); return pintarGaleria(); }
     else if (a === 'foto-renombrar') return renombrarFoto(id);
     else if (a === 'foto-borrar') return borrarFoto(id);
@@ -843,6 +888,7 @@ function bind() {
     $('btnSalir').addEventListener('click', salir);
     $('qEnvios').addEventListener('input', e => { S.q = e.target.value; pintarEnvios(); });
     $('qUsuarios').addEventListener('input', e => { S.qu = e.target.value; pintarUsuarios(); });
+    $('listaUsuarios').addEventListener('change', e => { const s = e.target.closest('[data-rango-de]'); if (s) asignarRango(s.dataset.rangoDe, +s.value); });
     $('qJug').addEventListener('input', e => { S.qj = e.target.value; pintarElo(); });
     $('btnAddJug').addEventListener('click', agregarJugador);
     $('formObjeto').addEventListener('submit', subirObjeto);
@@ -869,7 +915,7 @@ function bind() {
         if (!t) return;
         if (t.id === 'btnRefrescar') return cargarTodo();
         if (t.dataset.tab) {
-            ['elo', 'duelos', 'combos', 'contenido', 'galeria', 'ranking', 'reportes', 'usuarios'].forEach(n => mostrar($('tab-' + n), n === t.dataset.tab));
+            ['elo', 'duelos', 'combos', 'contenido', 'galeria', 'rangos', 'ranking', 'reportes', 'usuarios'].forEach(n => mostrar($('tab-' + n), n === t.dataset.tab));
             return activar('tabs', 'tab', t.dataset.tab);
         }
         if (t.dataset.filtro) { S.filtro = t.dataset.filtro; activar('filtros', 'filtro', S.filtro); return pintarEnvios(); }
