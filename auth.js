@@ -94,15 +94,26 @@
         if (!caja) return;                                   // solo existe en la pantalla de inicio
         const turno = ++revision;
         if (!user || !sb) { caja.hidden = true; caja.innerHTML = ''; return; }
-        const { data } = await sb.from('admins').select('rol').eq('user_id', user.id).maybeSingle();
+        const [adm, per, rg] = await Promise.all([
+            sb.from('admins').select('rol').eq('user_id', user.id).maybeSingle(),
+            sb.from('perfiles').select('rango').eq('id', user.id).maybeSingle(),
+            sb.from('rangos').select('*').order('orden')
+        ]);
         if (turno !== revision) return;                      // llegó una comprobación más nueva
-        const rol = data ? data.rol : null, nombre = nombreDe(user);
+        const rol = adm.data ? adm.data.rol : null, nombre = nombreDe(user);
+        /* Rango de la comunidad: si todavía no se ejecutó supabase-rangos.sql, simplemente no se muestra */
+        const ROMANOS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
+        const lista = rg.data || [], mi = per.data && per.data.rango ? per.data.rango : 1;
+        const actual = lista.find(r => r.orden === mi);
+        const rangoHTML = actual ? `<div class="perfil-rango" title="Tu rango en la comunidad"><span class="ins">${esc(actual.insignia)}</span><span>${ROMANOS[mi - 1] || mi}. ${esc(actual.nombre)}</span></div>
+                <div class="perfil-escala" aria-label="Escala de rangos">${lista.map(r => `<span class="${r.orden === mi ? 'actual' : r.orden < mi ? 'ganado' : ''}" title="${esc(r.nombre)}">${esc(r.insignia)}</span>`).join('')}</div>` : '';
         const desde = user.created_at ? new Date(user.created_at).toLocaleDateString('es', { dateStyle: 'long' }) : '';
         caja.innerHTML = `<div class="perfil-card">
             <div class="perfil-avatar" aria-hidden="true">${esc(nombre.charAt(0).toUpperCase())}</div>
             <div class="perfil-datos"><span class="perfil-eyebrow">MI PERFIL</span>
                 <h3 class="perfil-nombre">${esc(nombre)}</h3>
                 <span class="perfil-rol${rol ? ' admin' : ''}">${rol === 'dueno' ? 'Dueño' : rol === 'admin' ? 'Administrador' : 'Miembro'}</span>
+                ${rangoHTML}
                 ${desde ? `<small class="perfil-desde">En la Guarida desde el ${esc(desde)}</small>` : ''}</div>
             <div class="perfil-acciones">
                 ${rol ? '<a class="btn-gamer" href="admin.html"><i class="fa-solid fa-gauge-high"></i> Centro de mando</a>' : ''}
