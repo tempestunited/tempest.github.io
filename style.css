@@ -1282,3 +1282,13 @@ body {
     .perfil-acciones .btn-gamer { flex: 1 1 140px; text-align: center; }
 }
 @media (prefers-reduced-motion: reduce) { .perfil-seccion { animation: none; } }
+
+/* ═══════════════════════════════════════════════════════════
+   RANGOS DE LA COMUNIDAD (auth.js)
+═══════════════════════════════════════════════════════════ */
+.perfil-rango { display: inline-flex; align-items: center; gap: 8px; justify-self: start; margin-top: 6px; padding: 5px 14px 5px 8px; border-radius: 20px; background: rgba(255,0,51,0.12); border: 1px solid rgba(255,0,51,0.45); font: 700 12px "Orbitron", sans-serif; letter-spacing: 0.5px; }
+.perfil-rango .ins { font-size: 18px; line-height: 1; }
+.perfil-escala { display: flex; gap: 8px; margin-top: 8px; }
+.perfil-escala span { font-size: 16px; opacity: 0.28; filter: grayscale(1); transition: opacity 0.2s, transform 0.2s; }
+.perfil-escala span.ganado { opacity: 0.75; filter: none; }
+.perfil-escala span.actual { opacity: 1; filter: none; transform: scale(1.25); }
