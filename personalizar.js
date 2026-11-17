@@ -160,6 +160,12 @@ html.fondo-personal .ticker, html.fondo-personal .footer { background: rgba(3,0,
         if (!capa) { capa = document.createElement('div'); capa.id = 'fondoPersonal'; capa.setAttribute('aria-hidden', 'true'); document.body.prepend(capa); }
         capa.style.display = activo ? '' : 'none';
         if (!activo) return;
+        const ahorro = window.AhorroDatos && window.AhorroDatos.activo();
+        if (ahorro && (f.modo === 'video' || (f.modo === 'animado' && (f.valor === 'estrellas' || f.valor === 'brasas')))) {
+            capa.style.background = '#050014';   // con el ahorro activo no se reproducen videos ni partículas
+            capa.insertAdjacentHTML('beforeend', `<div class="fp-velo" style="opacity:${f.oscuridad / 100}"></div>`);
+            return;
+        }
         if (f.modo === 'color') capa.style.background = f.valor;
         else if (f.modo === 'animado') { if (f.valor === 'aurora' || f.valor === 'neon') capa.className = 'fp-' + f.valor; else particulas(f.valor); }
         else {
@@ -329,12 +335,19 @@ html.fondo-personal .ticker, html.fondo-personal .footer { background: rgba(3,0,
         if (!blob || blob.type !== 'image/webp') blob = await new Promise(r => c.toBlob(r, 'image/jpeg', 0.85));
         return blob;
     }
+    /* Borra del almacenamiento la foto anterior (si había una) para no acumular archivos. */
+    async function borrarFotoAnterior(url) {
+        const parte = String(url || '').split('/avatares/')[1];
+        if (!parte) return;
+        try { await window.sb.storage.from('avatares').remove([decodeURIComponent(parte.split('?')[0])]); } catch { /* no es grave */ }
+    }
+
     /* Traduce el error real a un mensaje que diga qué falta. */
     function msgFoto(err) {
         const m = String((err && (err.message || err.error_description)) || err || '').toLowerCase();
         if (m.includes('bucket not found')) return 'No existe la carpeta "avatares" en Supabase. Ejecuta supabase-personalizar.sql.';
         if (m.includes('row-level security') || m.includes('violates row') || m.includes('not authorized') || m.includes('permission denied') || m.includes('unauthorized'))
-            return 'Supabase rechazó el permiso. Ejecuta supabase-personalizar.sql y vuelve a iniciar sesión.';
+            return 'Supabase rechazó el permiso de la carpeta de fotos. Ejecuta de nuevo supabase-personalizar.sql.';
         if (m.includes('avatar_url') && (m.includes('column') || m.includes('schema cache'))) return 'Falta la columna del avatar. Ejecuta supabase-personalizar.sql.';
         if (m.includes('sin permiso')) return 'No se encontró tu perfil para guardar la foto. Cierra sesión, vuelve a entrar y prueba de nuevo.';
         if (m.includes('mime') || m.includes('not supported') || m.includes('invalid_mime')) return 'Ese formato de imagen no está permitido.';
@@ -348,19 +361,21 @@ html.fondo-personal .ticker, html.fondo-personal .footer { background: rgba(3,0,
         if (!f) { aviso('Elige una imagen.'); return; }
         if (!/^image\//.test(f.type) || f.size > 10 * 1024 * 1024) { aviso('La imagen debe pesar menos de 10 MB.'); return; }
         try {
-            const blob = await redimensionar(f), ext = blob.type === 'image/webp' ? 'webp' : 'jpg', ruta = `${u.id}/avatar.${ext}`;
-            const up = await window.sb.storage.from('avatares').upload(ruta, blob, { upsert: true, contentType: blob.type, cacheControl: '60' });
+            const blob = await redimensionar(f), ext = blob.type === 'image/webp' ? 'webp' : 'jpg', ruta = `${u.id}/avatar-${Date.now()}.${ext}`, antes = avatarUrl;
+            const up = await window.sb.storage.from('avatares').upload(ruta, blob, { contentType: blob.type, cacheControl: '31536000' });
             if (up.error) throw up.error;
-            const url = window.sb.storage.from('avatares').getPublicUrl(ruta).data.publicUrl + '?v=' + Date.now();
+            const url = window.sb.storage.from('avatares').getPublicUrl(ruta).data.publicUrl;
             const r = await window.sb.from('perfiles').update({ avatar_url: url }).eq('id', u.id).select();
             if (r.error || !r.data.length) throw r.error || new Error('sin permiso');
+            borrarFotoAnterior(antes);
             aviso('Foto de perfil actualizada.');
             cargarAvatarPerfil(); pintarFoto();
         } catch (err) { console.error('Foto de perfil:', err); aviso(msgFoto(err)); }
     }
     async function quitarFoto() {
         const u = await usuario(); if (!u) return;
-        await window.sb.storage.from('avatares').remove([`${u.id}/avatar.webp`, `${u.id}/avatar.jpg`]);
+        await borrarFotoAnterior(avatarUrl);
+        await window.sb.storage.from('avatares').remove([`${u.id}/avatar.webp`, `${u.id}/avatar.jpg`]).catch(() => {});
         const r = await window.sb.from('perfiles').update({ avatar_url: null }).eq('id', u.id).select();
         if (r.error || !r.data.length) { aviso('No se pudo quitar la foto.'); return; }
         aviso('Foto quitada.'); cargarAvatarPerfil(); pintarFoto();
@@ -467,6 +482,7 @@ html.fondo-personal .ticker, html.fondo-personal .footer { background: rgba(3,0,
         $('fpVolumen').value = prefs.musica.vol;
         $('fpVolumen').addEventListener('input', e => { prefs.musica.vol = +e.target.value; audio.volume = prefs.musica.vol; guardarPrefs(); });
         window.Personalizar = { abrir, cerrar };
+        document.addEventListener('ahorro-cambiado', () => aplicarFondo());
         if ($('perfil')) new MutationObserver(aplicarAvatarEnPerfil).observe($('perfil'), { childList: true, subtree: true });
         if (window.sb) { cargarAvatarPerfil(); window.sb.auth.onAuthStateChange(() => setTimeout(cargarAvatarPerfil, 0)); }
         pintarFondoUI(); aplicarFondo();
