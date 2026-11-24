@@ -52,7 +52,7 @@
             .map((l, i) => `<span><i class="${ICONOS_TORNEO[i] || 'fa-solid fa-circle-info'}"></i> ${esc(l)}</span>`).join('');
         const boton = estado === 'abierto' ? `<a href="registro.html" class="torneo-btn">${textoBoton}</a>`
             : `<button class="torneo-btn deshabilitado" disabled>${textoBoton}</button>`;
-        return `<div class="torneo-card"><div class="torneo-header">
+        return `<div class="torneo-card" data-torneo="${esc(r.id)}"><div class="torneo-header">
             <div class="torneo-icono"><i class="fa-solid ${clase(r.img_clase) || 'fa-trophy'}"></i></div><span class="torneo-prize">${esc(r.premio)}</span></div>
             <h3 class="torneo-nombre">${esc(r.titulo)}</h3><div class="torneo-meta">${lineas}</div>
             <span class="torneo-estado estado-${estado}">${textoEstado}</span>${boton}</div>`;
