@@ -97,6 +97,7 @@
         <button class="filtro-btn" data-tab="reportes"><i class="fa-solid fa-flag"></i> Reportes</button>
         <button class="filtro-btn" data-tab="usuarios"><i class="fa-solid fa-users"></i> Usuarios y admins</button>
         <button class="filtro-btn" data-tab="rangos"><i class="fa-solid fa-medal"></i> Rangos</button>
+        <button class="filtro-btn" data-tab="inscritos"><i class="fa-solid fa-flag-checkered"></i> Inscritos</button>
     </div>
 
     <section id="tab-elo">
@@ -222,6 +223,11 @@
 
     <section id="tab-reportes" style="display:none"><div id="listaReportes"></div></section>
 
+    <section id="tab-inscritos" style="display:none">
+        <p class="vacio" style="text-align:left;padding:0 0 14px">Personas inscritas en cada torneo, con el apodo que eligieron. Para cerrar las inscripciones de un torneo, cambia su estado en <b>Contenido → Torneos</b>.</p>
+        <div id="listaInscritos"></div>
+    </section>
+
     <section id="tab-rangos" style="display:none">
         <p class="vacio" style="text-align:left;padding:0 0 14px">Rangos de la comunidad (no tienen relación con el ranking Elo). Aquí cambias la <b>insignia principal</b> y el nombre de cada rango. Para dar un rango a un usuario, ve a <b>Usuarios y admins</b>.</p>
         <div id="listaRangos"></div>
@@ -263,7 +269,7 @@
 const sb = window.sb;
 const $ = id => document.getElementById(id);
 const toast = m => window.Toast(m);
-const S = { user: null, rol: null, envios: [], reportes: [], perfiles: [], admins: [], jugadores: [], duelos: [], objetos: [], contenido: [], textos: [], galeria: [], rangos: [], car: 'todas', qg: '', sel: new Set(), elegida: null, elegidaObj: null, picker: null, cont: { sec: 'noticias', edit: null }, qj: '', filtro: 'pendientes', q: '', qu: '' };
+const S = { user: null, rol: null, envios: [], reportes: [], perfiles: [], admins: [], jugadores: [], duelos: [], objetos: [], contenido: [], textos: [], galeria: [], rangos: [], inscritos: [], car: 'todas', qg: '', sel: new Set(), elegida: null, elegidaObj: null, picker: null, cont: { sec: 'noticias', edit: null }, qj: '', filtro: 'pendientes', q: '', qu: '' };
 
 /* ---------- Utilidades ---------- */
 function esc(s) { return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
@@ -300,7 +306,7 @@ async function salir() { await sb.auth.signOut(); }
 
 /* ---------- Carga de datos ---------- */
 async function cargarTodo() {
-    const [e, r, p, a, jg, du, ob, ct, tx, ga, rg] = await Promise.all([
+    const [e, r, p, a, jg, du, ob, ct, tx, ga, rg, ins] = await Promise.all([
         sb.from('submissions').select('*').order('created_at', { ascending: false }).limit(500),
         sb.from('reports').select('id, reason, created_at, record_id, submissions(username, streak, evidence_url, hidden)').order('created_at', { ascending: false }),
         sb.from('perfiles').select('id, usuario, creado_en, rango').order('creado_en', { ascending: false }),
@@ -311,10 +317,11 @@ async function cargarTodo() {
         sb.from('contenido').select('*').order('orden'),
         sb.from('textos').select('*'),
         sb.from('galeria').select('*').order('creado_en', { ascending: false }).limit(1000),
-        sb.from('rangos').select('*').order('orden')
+        sb.from('rangos').select('*').order('orden'),
+        sb.from('inscripciones').select('id, creado_en, torneo_id, perfiles(usuario, apodo), contenido(titulo)').order('creado_en', { ascending: false })
     ]);
-    if (e.error || r.error || p.error || a.error || jg.error || du.error || ob.error || ct.error || tx.error || ga.error || rg.error) toast('Algunos datos no cargaron. ¿Ejecutaste supabase-admin.sql y supabase-elo.sql?');
-    S.envios = e.data || []; S.reportes = r.data || []; S.perfiles = p.data || []; S.admins = a.data || []; S.jugadores = jg.data || []; S.duelos = du.data || []; S.objetos = ob.data || []; S.contenido = ct.data || []; S.textos = tx.data || []; S.galeria = ga.data || []; S.rangos = rg.data || [];
+    if (e.error || r.error || p.error || a.error || jg.error || du.error || ob.error || ct.error || tx.error || ga.error || rg.error || ins.error) toast('Algunos datos no cargaron. ¿Ejecutaste supabase-admin.sql y supabase-elo.sql?');
+    S.envios = e.data || []; S.reportes = r.data || []; S.perfiles = p.data || []; S.admins = a.data || []; S.jugadores = jg.data || []; S.duelos = du.data || []; S.objetos = ob.data || []; S.contenido = ct.data || []; S.textos = tx.data || []; S.galeria = ga.data || []; S.rangos = rg.data || []; S.inscritos = ins.data || [];
     pintarTodo();
 }
 
@@ -819,7 +826,24 @@ async function guardarRango(orden) {
     toast('Rango actualizado. Ya se ve en la página.'); await cargarTodo();
 }
 
-function pintarTodo() { pintarStats(); pintarElo(); pintarDuelos(); poblarSelects(); pintarObjetos(); poblarCombo(); pintarListaCont(); pintarGaleria(); pintarRangos(); if (!$('camposCont').innerHTML) pintarFormCont(); pintarEnvios(); pintarReportes(); pintarUsuarios(); }
+/* ---------- Inscritos en torneos ---------- */
+function pintarInscritos() {
+    const grupos = {};
+    S.inscritos.forEach(i => { const t = (i.contenido && i.contenido.titulo) || 'Torneo eliminado'; (grupos[t] = grupos[t] || []).push(i); });
+    $('listaInscritos').innerHTML = Object.keys(grupos).map(t =>
+        `<h3 style="margin:18px 0 8px;font-family:'Orbitron',sans-serif;font-size:14px">🏆 ${esc(t)} <span class="tag cl">${grupos[t].length} inscrito(s)</span></h3>`
+        + grupos[t].map(i => `<div class="fila sin-img"><div><h4>${esc((i.perfiles && i.perfiles.apodo) || 'Sin apodo')} <span style="color:#999;font-weight:400">· ${esc((i.perfiles && i.perfiles.usuario) || '?')}</span></h4>
+            <small>Inscrito: ${fecha(i.creado_en)}</small></div><div class="acc"><button class="btn-gamer" data-a="quitar-inscrito" data-id="${i.id}">Quitar</button></div></div>`).join('')
+    ).join('') || '<p class="vacio">Todavía no hay inscritos en ningún torneo.</p>';
+}
+async function quitarInscrito(id) {
+    if (!confirm('¿Quitar a esta persona del torneo?')) return;
+    const { data, error } = await sb.from('inscripciones').delete().eq('id', id).select();
+    if (error || !data.length) { toast('No se pudo quitar.'); return; }
+    S.inscritos = S.inscritos.filter(x => x.id !== id); pintarInscritos(); toast('Inscripción quitada.');
+}
+
+function pintarTodo() { pintarStats(); pintarElo(); pintarDuelos(); poblarSelects(); pintarObjetos(); poblarCombo(); pintarListaCont(); pintarGaleria(); pintarRangos(); pintarInscritos(); if (!$('camposCont').innerHTML) pintarFormCont(); pintarEnvios(); pintarReportes(); pintarUsuarios(); }
 
 /* ---------- Acciones (siempre se comprueba que la base de datos las aceptó) ---------- */
 async function actualizarEnvio(id, cambio) {
@@ -863,6 +887,7 @@ async function manejarAccion(a, id) {
     else if (a === 'anular-duelo') return anularDuelo(id);
     else if (a === 'renombrar-jug') return renombrarJugador(id);
     else if (a === 'rango-guardar') return guardarRango(+id);
+    else if (a === 'quitar-inscrito') return quitarInscrito(id);
     else if (a === 'emoji') { const [o, em] = id.split('|'); $('rgIns' + o).value = em; return; }
     else if (a === 'gal-marcar') { if (S.sel.has(id)) S.sel.delete(id); else S.sel.add(id); return pintarGaleria(); }
     else if (a === 'foto-renombrar') return renombrarFoto(id);
@@ -915,7 +940,7 @@ function bind() {
         if (!t) return;
         if (t.id === 'btnRefrescar') return cargarTodo();
         if (t.dataset.tab) {
-            ['elo', 'duelos', 'combos', 'contenido', 'galeria', 'rangos', 'ranking', 'reportes', 'usuarios'].forEach(n => mostrar($('tab-' + n), n === t.dataset.tab));
+            ['elo', 'duelos', 'combos', 'contenido', 'galeria', 'rangos', 'inscritos', 'ranking', 'reportes', 'usuarios'].forEach(n => mostrar($('tab-' + n), n === t.dataset.tab));
             return activar('tabs', 'tab', t.dataset.tab);
         }
         if (t.dataset.filtro) { S.filtro = t.dataset.filtro; activar('filtros', 'filtro', S.filtro); return pintarEnvios(); }
