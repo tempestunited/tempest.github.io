@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 /* Botones extra de la página: personalizar (fondo, música, foto) y ahorro de datos. */
 (function () {
-    ['personalizar.js', 'ahorro.js'].forEach(function (nombre) {
+    ['personalizar.js', 'ahorro.js', 'torneo.js'].forEach(function (nombre) {
         if (document.querySelector('script[src*="' + nombre + '"]')) return;
         var p = document.createElement('script');
         p.src = nombre;
